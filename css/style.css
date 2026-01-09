@@ -110,15 +110,42 @@ header:hover .mega-menu {
   cursor: pointer;
 }
 
-.hero {
-  width: 100%;
-  height: 100vh;
-  overflow: hidden;
+.hero { width: 100%; height: 100vh; overflow: hidden; position: relative;}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6); /* 이미지 위에 30% 어두운 막 생성 */
+  z-index: 1;
 }
+.hero-inner { position: absolute; z-index: 2; height: 100%; width: 100%; max-width: 1200px; left: 0;
+  right: 0; margin: 0 auto; padding: 0 16px; display: flex; align-items: center; justify-content: center; text-align: center; pointer-events: none}
+.hero-text { max-width: 620px; pointer-events: auto;}
+.hero-title {  font-size: 5.2rem;
+  line-height: 1.2;
+  margin-bottom: 1.2rem;
+
+  background: linear-gradient(
+    90deg,
+    #3f5f66 0%,
+	#6fa6a1 40%,
+    #d1ffe9 100%
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+
+}
+.hero h1 { font-size: 2.2rem; margin-bottom: 1.2rem; line-height: 1.2; text-shadow: none; color: #fff; }
+.hero p { font-size: 1.3rem; margin-bottom: 2.5rem; color: rgba(255,255,255,0.9); }
+.point  {color:#d1ffe9; font-size: 3.2rem;}
+.fx-underline{position:relative; color:#fff; text-shadow:4px 7px 7px #333;}
+.fx-underline::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:10px; background:linear-gradient(90deg,#b2f1d6,#2C4349); border-radius:6px; transform:scaleX(0); transform-origin: left; animation:underline 1.2s .5s ease-out forwards}
+@keyframes underline{to{transform:scaleX(1)}}
 
 .heroSwiper {
-  width: 100%;
-  height: 100%;
+  position: absolute; inset: 0; z-index: 1;
 }
 
 .heroSwiper .swiper-slide {
@@ -130,7 +157,6 @@ header:hover .mega-menu {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center;
 }
 
 .products {
@@ -417,7 +443,7 @@ header:hover .mega-menu {
 
 @supports (height: 100svh) {
   .hero {
-    height: 100svh;        /* 모바일 주소창 대응 최신 방식 */
+    height: 90svh;        /* 모바일 주소창 대응 최신 방식 */
   }
 }
 
@@ -430,9 +456,48 @@ header:hover .mega-menu {
     padding: 48px 0;
   }
   
-      .sub-visual { height: 200px; }
-    .sub-tab li a { padding: 15px 20px; font-size: 14px; }
-    .content-title { font-size: 24px; }
+  .sub-visual { height: 200px; }
+  .sub-tab li a { padding: 15px 20px; font-size: 14px; }
+  .content-title { font-size: 24px; }
+  
+  .hero {
+    height: 0vh; /* 모바일에서는 너무 길지 않게 높이 조절 (취향껏 수정) */
+    min-height: 262px;
+  }
+
+  .hero-inner {
+    padding: 0 20px;
+	height: 70%;
+	margin-top: 44px;
+  }
+
+  .hero-title {
+    font-size: 2rem; /* 메인 타이틀 크기 축소 */
+    display: block;
+    margin-bottom: 10px;
+  }
+  .point {font-size: 1.8rem;}
+  .hero h1 {font-size:1rem; line-height:1.2;}
+
+  .fx-underline {
+    font-size: 1.2rem; /* 서브 텍스트 크기 축소 */
+    display: inline-block;
+    margin-bottom: 5px;
+  }
+  
+  .fx-underline::after {height:6px;}
+
+  /* 모바일에서 HTML의 <br> 태그를 무시하게 만드는 마법의 코드 */
+  .hero-text br {
+    display: none;
+  }
+  
+  /* 대신 강조하고 싶은 부분에만 강제 줄바꿈을 주고 싶다면 아래처럼 활용 */
+  .mobile-br {
+    display: block;
+    content: "";
+    margin-top: 5px;
+  }
   
   .footer-inner {
     grid-template-columns: 1fr;

@@ -60,6 +60,13 @@
 
 <!-- 메인 배너 -->
 <section class="hero">
+  <div class="hero-inner">
+    <div class="hero-text">
+	  <h1><span class="hero-title">JC MedicaL</span><br>
+	  <span class="fx-underline">
+	   <span class="point">J</span>oint <span class="point">C</span>ommitment</span><br><span class="fx-underline">의료 서비스와 기술에 대한 공동의 헌신</span></h1>
+	</div>
+  </div>
   <div class="swiper heroSwiper">
     <div class="swiper-wrapper">
       <div class="swiper-slide"><img src="img/banner1.jpg" alt=""></div>
@@ -75,7 +82,7 @@
   const heroSwiper = new Swiper('.heroSwiper', {
     loop: true,
     autoplay: {
-      delay: 2000,
+      delay: 4000,
       disableOnInteraction: false,
     },
     navigation: {
@@ -150,9 +157,9 @@
   const productList = document.getElementById('productList');
 
   const products = [
-    { img: 'img/pro1.jpg', name: '초음파 진단기 A' },
-    { img: 'img/pro2.jpg', name: '초음파 진단기 B' },
-    { img: 'img/pro3.png', name: '초음파 진단기 C' },
+    { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기' },
+    { img: 'img/pro2_con.jpg', name: 'Consona 시리즈' },
+    { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M' },
   ];
 
   products.forEach(p => {
@@ -270,6 +277,6 @@
     © 2026 JC Medical. All rights reserved.
   </div>
 </footer>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>
+<!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>-->
 </body>
 </html>
