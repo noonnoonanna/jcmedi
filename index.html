@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCMedical</title>  
+  <meta name="description" content="JCMedical Mindray 전문 대리점 초음파기기, 심전도, 환자감시모니터 등 의료 현장의 최적 솔루션을 제공합니다.">  
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="JCMedical">  
+  <link rel="canonical" href="https://www.jcmedical.com/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <img src="img/logo_long.png" alt="JC Medical">
+        </a>
+        
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="about.html">회사소개</a></li>
+                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
+                <li class="nav-item"><a href="notice.html">공지사항</a></li>
+                <li class="nav-item"><a href="contact.html">고객지원</a></li>
+            </ul>
+        </nav>
+        
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </div>
+
+    <div class="mega-menu">
+        <div class="mega-inner">
+            <div class="mega-col">
+                <a href="about.html">회사소개</a>
+                <a href="jcstory.html">JC Story</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="products.html?cat=ultrasound">초음파진단기</a>
+                <a href="products.html?cat=used">중고장비</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="notice.html">공지사항</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="contact.html">문의하기</a>
+                <a href="library.html">자료실</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- 메인 배너 -->
+<section class="hero">
+  <div class="swiper heroSwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide"><img src="img/banner1.jpg" alt=""></div>
+      <div class="swiper-slide"><img src="img/banner2.jpg" alt=""></div>
+      <div class="swiper-slide"><img src="img/banner3.jpg" alt=""></div>
+    </div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
+  </div>
+</section>
+
+<script>
+  const heroSwiper = new Swiper('.heroSwiper', {
+    loop: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+  });
+</script>
+<style>
+.heroSwiper .swiper-button-next,
+.heroSwiper .swiper-button-prev {
+  color: white;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 아이콘 크기 */
+.heroSwiper .swiper-button-next::after,
+.heroSwiper .swiper-button-prev::after {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 좌우 위치 */
+.heroSwiper .swiper-button-prev {
+  left: 24px;
+}
+
+.heroSwiper .swiper-button-next {
+  right: 24px;
+}
+
+/* hover 시 세련되게 */
+.heroSwiper .swiper-button-next:hover,
+.heroSwiper .swiper-button-prev:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 768px) {
+  .heroSwiper .swiper-button-next,
+  .heroSwiper .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+  }
+
+  .heroSwiper .swiper-button-next::after,
+  .heroSwiper .swiper-button-prev::after {
+    font-size: 14px;
+  }
+}
+</style>
+
+<!-- 제품 슬라이드 -->
+<section class="products">
+  <h2 class="section-title">Products</h2>
+
+  <div class="swiper productSwiper">
+    <div class="swiper-wrapper" id="productList">
+      <!-- JS에서 swiper-slide로 채워짐 -->
+    </div>
+
+    <!-- 좌우 버튼 (선택) -->
+    <div class="swiper-button-prev product-prev"></div>
+    <div class="swiper-button-next product-next"></div>
+  </div>
+</section>
+<script>
+  const productList = document.getElementById('productList');
+
+  const products = [
+    { img: 'img/pro1.jpg', name: '초음파 진단기 A' },
+    { img: 'img/pro2.jpg', name: '초음파 진단기 B' },
+    { img: 'img/pro3.png', name: '초음파 진단기 C' },
+  ];
+
+  products.forEach(p => {
+    const slide = document.createElement('div');
+    slide.className = 'swiper-slide';
+    slide.innerHTML = `
+      <img src="${p.img}" alt="${p.name}">
+      <div style="padding:16px;font-weight:500;">${p.name}</div>
+    `;
+    productList.appendChild(slide);
+  });
+</script>
+<script>
+  const productSwiper = new Swiper('.productSwiper', {
+    slidesPerView: 3,
+    spaceBetween: 24,
+    loop: true,
+
+    navigation: {
+      nextEl: '.product-next',
+      prevEl: '.product-prev',
+    },
+
+    breakpoints: {
+      0: {
+        slidesPerView: 1,
+      },
+      768: {
+        slidesPerView: 2,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+    },
+  });
+</script>
+
+<style>
+/* Swiper */
+.productSwiper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* 각 슬라이드 */
+.productSwiper .swiper-slide {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* 이미지 */
+.productSwiper .swiper-slide img {
+  width: 100%;
+  aspect-ratio: 4 / 3;   /* 이미지 비율 고정 */
+  object-fit: cover;
+}
+
+/* 좌우 버튼 */
+.product-prev,
+.product-next {
+  color: #2C4349;
+}
+</style>
+<!-- 공지 / 스토리 -->
+<section class="notice-map-section">
+  <h2 class="section-title">JC Medical</h2>  
+    <div class="notice container">        
+        <div class="grid-layout">
+            <div class="notice-area">
+                <div class="area-header">
+                    <h3>공지사항</h3>
+                    <a href="notice.html" class="plus-btn">+</a>
+                </div>
+                <div id="noticeList" class="notice-list-container">
+                </div>
+            </div>
+
+            <div class="map-area">
+                <div class="area-header">
+                    <h3>찾아오시는 길</h3>
+                </div>
+                <div id="kakaomap" class="map-box"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-logo-area">
+      <img src="img/logo.png" alt="JC Medical" class="footer-logo">
+    </div>
+	
+	<div class="footer-text-area">
+      <p class="footer-info">
+        Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
+        Tel: 070-4651-5088 | 010-9474-6127 <br>
+        E-mail: jcmedi0826@naver.com
+      </p>
+	  
+	  <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <span class="divider">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 JC Medical. All rights reserved.
+  </div>
+</footer>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>
+</body>
+</html>

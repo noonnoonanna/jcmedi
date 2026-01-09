@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUCT | JC Medical</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <section class="sub-visual">
+        <div class="visual-text">
+            <h2>PRODUCT</h2>
+            <p>JC Medical이 제안하는 최첨단 의료 솔루션입니다.</p>
+        </div>
+    </section>
+
+    <section class="content-wrapper">
+        <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
+            <p>총 <span id="product-count" style="color:var(--point); font-weight:700;">0</span>개의 제품이 있습니다.</p>
+            <a href="product_write.html" id="admin-write-btn" class="btn btn-point admin-only hide">제품 등록</a>
+        </div>
+
+        <div id="product-grid" class="grid">
+            </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        async function loadProducts() {
+            const isAdmin = await checkAdmin();
+            const { data, count } = await _supabase
+                .from('products')
+                .select('*', { count: 'exact' })
+                .order('created_at', { ascending: false });
+
+            document.getElementById('product-count').innerText = count;
+            const grid = document.getElementById('product-grid');
+            
+            grid.innerHTML = data.map(p => `
+                <div class="card product-card" onclick="location.href='product_view.html?id=${p.id}'" style="cursor:pointer;">
+                    <div class="thumb" style="height:250px; background:url('${p.image_url || 'img/no-image.png'}') no-repeat center/cover; border-radius:8px 8px 0 0;"></div>
+                    <div class="info" style="padding:20px;">
+                        <h4 style="font-size:18px; margin-bottom:10px;">${p.title}</h4>
+                        <p style="color:#666; font-size:14px;">등록일: ${p.created_at.split('T')[0]}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        window.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>

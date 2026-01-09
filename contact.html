@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문의하기</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section>
+        <h2 class="section-title">문의하기</h2>
+        <form id="contactForm" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="name" placeholder="이름" required style="padding: 10px;">
+            <input type="email" id="email" placeholder="이메일" required style="padding: 10px;">
+            <textarea id="message" rows="5" placeholder="문의내용을 입력하세요" style="padding: 10px;"></textarea>
+            <button type="submit" class="btn btn-point">문의 제출</button>
+        </form>
+    </section>
+
+    <script>
+        document.getElementById('contactForm').onsubmit = async (e) => {
+            e.preventDefault();
+            alert("문의가 접수되었습니다. (실제 DB 연결 시 Supabase insert 로직 추가)");
+        };
+    </script>
+</body>
+</html>

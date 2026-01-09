@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>제품상세 | JC Medical</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <section class="content-wrapper">
+        <div id="product-detail">
+            <div id="detail-header" style="border-bottom:2px solid var(--point); padding-bottom:20px; margin-bottom:40px;">
+                <h2 id="view-title" style="font-size:32px;">로딩 중...</h2>
+                <p id="view-date" style="color:#666;">-</p>
+            </div>
+
+            <div id="view-main-img" style="text-align:center; margin-bottom:50px;">
+                <img id="p-img" src="" style="max-width:100%; border-radius:10px;">
+            </div>
+
+            <div id="view-content" class="ql-editor" style="min-height:300px; font-size:18px; line-height:1.8;">
+                </div>
+
+            <div class="admin-controls hide admin-only" style="margin-top:50px; text-align:right; border-top:1px solid #ddd; padding-top:20px; display:flex; gap:10px; justify-content:flex-end;">
+                <button class="btn" style="background:#666; color:#fff;" onclick="editProduct()">수정하기</button>
+                <button class="btn" style="background:#e74c3c; color:#fff;" onclick="deleteProduct()">삭제하기</button>
+            </div>
+        </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        async function loadDetail() {
+            await checkAdmin();
+            const { data, error } = await _supabase.from('products').select('*').eq('id', productId).single();
+            
+            if (data) {
+                document.getElementById('view-title').innerText = data.title;
+                document.getElementById('view-date').innerText = `등록일: ${data.created_at.split('T')[0]}`;
+                document.getElementById('p-img').src = data.image_url;
+                document.getElementById('view-content').innerHTML = data.content;
+            }
+        }
+
+        async function deleteProduct() {
+            if(confirm("정말로 이 제품을 삭제하시겠습니까?")) {
+                await _supabase.from('products').delete().eq('id', productId);
+                location.href = 'product_list.html';
+            }
+        }
+
+        window.onload = loadDetail;
+    </script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>제품소개 | 메디컬 솔루션</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <section>
+        <h2 class="section-title">제품 소개</h2>
+        <div class="admin-only hide" style="margin-bottom: 20px; text-align: right;">
+            <button class="btn btn-point" onclick="addProduct()">새 제품 등록</button>
+        </div>
+        <div id="product-list" class="grid">
+            </div>
+    </section>
+
+    <script src="app.js"></script>
+    <script>
+        async function loadProducts() {
+            const isAdmin = await checkAdmin();
+            const { data } = await _supabase.from('products').select('*').order('created_at', {ascending: false});
+            const list = document.getElementById('product-list');
+            list.innerHTML = data.map(p => `
+                <div class="card">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <p><strong>${p.price}원</strong></p>
+                    ${isAdmin ? `
+                        <div class="admin-controls">
+                            <button onclick="deleteProduct('${p.id}')">삭제</button>
+                            <button onclick="editProduct('${p.id}', '${p.name}')">수정</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function addProduct() {
+            const name = prompt("제품명:");
+            const desc = prompt("설명:");
+            if(name) {
+                await _supabase.from('products').insert([{ name, description: desc }]);
+                loadProducts();
+            }
+        }
+
+        async function deleteProduct(id) {
+            if(confirm("정말 삭제할까요?")) {
+                await _supabase.from('products').delete().eq('id', id);
+                loadProducts();
+            }
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>

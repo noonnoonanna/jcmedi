@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCMedical</title>  
+  <meta name="description" content="JCMedical Mindray 전문 대리점 초음파기기, 심전도, 환자감시모니터 등 의료 현장의 최적 솔루션을 제공합니다.">  
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="JCMedical">  
+  <link rel="canonical" href="https://www.jcmedical.com/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <img src="img/logo_long.png" alt="JC Medical">
+        </a>
+        
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="about.html">회사소개</a></li>
+                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
+                <li class="nav-item"><a href="notice.html">공지사항</a></li>
+                <li class="nav-item"><a href="contact.html">고객지원</a></li>
+            </ul>
+        </nav>
+        
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </div>
+
+    <div class="mega-menu">
+        <div class="mega-inner">
+            <div class="mega-col">
+                <a href="about.html">회사소개</a>
+                <a href="jcstory.html">JC Story</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="products.html?cat=ultrasound">초음파진단기</a>
+                <a href="products.html?cat=used">중고장비</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="notice.html">공지사항</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="contact.html">문의하기</a>
+                <a href="library.html">자료실</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="sub-visual">
+    <div class="visual-text">
+        <h2>회사소개</h2>
+        <p>혁신적인 의료기술로 인류의 건강한 삶에 기여합니다.</p>
+    </div>
+</section>
+
+<nav class="sub-tab">
+    <ul>
+        <li><a href="#greeting">인사말</a></li>
+        <li><a href="#history">연혁</a></li>
+        <li><a href="#policy">경영방침</a></li>
+    </ul>
+</nav>
+
+<div class="content-wrapper">
+    <section id="greeting" class="about-section">
+        <h3 class="content-title">인사말</h3>
+        <div class="greeting-box">
+            <div class="text">
+                <h4>최고의 품질과 신뢰를 바탕으로 고객과 함께하겠습니다.</h4>
+                <p>안녕하십니까? JC Medical입니다. 저희는 급변하는 의료 환경 속에서 최첨단 의료기기 솔루션을 제공하며...</p>
+                <p>고객 여러분의 성원에 보답하기 위해 최선을 다하겠습니다. 감사합니다.</p>
+                <p class="signature">JC Medical 임직원 일동</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="history" class="about-section bg-alt-section">
+        <h3 class="content-title">연혁</h3>
+        <div class="history-list">
+            <div class="history-item">
+                <span class="year">2025</span>
+                <p>신사옥 이전 및 초음파 진단기 라인업 확대</p>
+            </div>
+            <div class="history-item">
+                <span class="year">2020</span>
+                <p>JC Medical 법인 설립 및 의료기기 판매업 허가</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="policy" class="about-section">
+        <h3 class="content-title">경영방침</h3>
+        <div class="policy-grid">
+            <div class="policy-card">
+                <div class="icon">🤝</div>
+                <h5>고객 신뢰</h5>
+                <p>정직한 서비스로 고객과의 신뢰를 최우선으로 합니다.</p>
+            </div>
+            <div class="policy-card">
+                <div class="icon">💡</div>
+                <h5>기술 혁신</h5>
+                <p>최신 의료 기술을 빠르게 도입하여 최적의 솔루션을 제공합니다.</p>
+            </div>
+            <div class="policy-card">
+                <div class="icon">🌿</div>
+                <h5>상생 경영</h5>
+                <p>의료 환경의 발전을 위해 파트너와 함께 성장합니다.</p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-logo-area">
+      <img src="img/logo.png" alt="JC Medical" class="footer-logo">
+    </div>
+	
+	<div class="footer-text-area">
+      <p class="footer-info">
+        Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
+        Tel: 070-4651-5088 | 010-9474-6127 <br>
+        E-mail: jcmedi0826@naver.com
+      </p>
+	  
+	  <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <span class="divider">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2026 JC Medical. All rights reserved.
+  </div>
+</footer>
+</body>
+</html>
