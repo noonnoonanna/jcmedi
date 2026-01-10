@@ -27,7 +27,7 @@
                 <li class="nav-item"><a href="about.html">회사소개</a></li>
                 <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
                 <li class="nav-item"><a href="notice.html">공지사항</a></li>
-                <li class="nav-item"><a href="contact.html">고객지원</a></li>
+                <li class="nav-item"><a href="contact.html">문의하기</a></li>
             </ul>
         </nav>
         
@@ -65,20 +65,23 @@
 
 <div class="content-wrapper">
     <section>
-        <form id="contactForm" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
-            <input type="text" id="name" placeholder="이름" required style="padding: 10px;">
-            <input type="email" id="email" placeholder="이메일" required style="padding: 10px;">
-            <textarea id="message" rows="5" placeholder="문의내용을 입력하세요" style="padding: 10px;"></textarea>
-            <button type="submit" class="btn btn-point">문의 제출</button>
-        </form>
+		<form 
+		name="contact"
+		method="POST"
+		data-netlify="true"
+		style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;"
+		>
+		<!-- Netlify가 form 인식용 -->
+		<input type="hidden" name="form-name" value="contact">
+		
+		<input type="text" name="name" placeholder="이름" required style="padding: 10px;">
+		<input type="email" name="email" placeholder="이메일" required style="padding: 10px;">
+		<input type="tel" name="tel" placeholder="연락처" required style="padding: 10px;">
+		<textarea name="message" rows="5" placeholder="문의내용을 입력하세요" style="padding: 10px;"></textarea>
+		
+		<button type="submit" class="btn btn-point">문의 제출</button>
+		</form>
     </section>
-
-    <script>
-        document.getElementById('contactForm').onsubmit = async (e) => {
-            e.preventDefault();
-            alert("문의가 접수되었습니다. (실제 DB 연결 시 Supabase insert 로직 추가)");
-        };
-    </script>
 </div>
 </body>
 </html>
