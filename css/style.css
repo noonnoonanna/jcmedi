@@ -744,6 +744,31 @@ header:hover .mega-menu {
 }
 
 @media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    height: 100vh;
+    background: #fff;
+    transition: right 0.3s ease;
+    padding-top: 80px;
+    z-index: 999;
+  }
+
+  .nav.active {
+    right: 0;
+  }
+
+  .nav-menu {
+    flex-direction: column;
+    gap: 30px;
+    padding-left: 30px;
+  }
+}
+
+
+@media (max-width: 768px) {
   .heroSwiper {
     height: 260px;
   }

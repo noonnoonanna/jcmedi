@@ -1,6 +1,6 @@
 const supabaseClient = supabase.createClient(
-  'YOUR_SUPABASE_URL',
-  'YOUR_PUBLIC_ANON_KEY'
+  'https://lflnsswvlxjpikphdcxz.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbG5zc3d2bHhqcGlrcGhkY3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjQ5NjMsImV4cCI6MjA4MzUwMDk2M30.QqoOA6qfv1fU11OMWl3vBw9EnZjmisSqK1Y0SO7ij0E'
 );
 
 async function checkAdmin() {
@@ -60,3 +60,14 @@ window.onload = () => {
     fetchMainNotices();
     initMap();
 };
+
+document.addEventListener('DOMContentLoaded', () => {
+	console.log(23);
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.querySelector('.nav');
+
+  hamburger.addEventListener('click', () => {
+    nav.classList.toggle('active');
+	console.log(1);
+  });
+});

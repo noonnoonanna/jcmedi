@@ -11,10 +11,8 @@
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/app.js" defer></script>
-  <script src="js/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>
+  <!--<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>-->
 </head>
 <body>
 <header>
@@ -32,14 +30,13 @@
             </ul>
         </nav>
         
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <div class="hamburger">☰</div>
     </div>
 
     <div class="mega-menu">
         <div class="mega-inner">
             <div class="mega-col">
                 <a href="about.html">회사소개</a>
-                <a href="jcstory.html">JC Story</a>
             </div>
         
             <div class="mega-col">
@@ -53,7 +50,6 @@
         
             <div class="mega-col">
                 <a href="contact.html">문의하기</a>
-                <a href="library.html">자료실</a>
             </div>
         </div>
     </div>
@@ -74,8 +70,8 @@
       <div class="swiper-slide"><img src="img/banner2.jpg" alt=""></div>
       <div class="swiper-slide"><img src="img/banner3.jpg" alt=""></div>
     </div>
-    <div class="swiper-button-prev"></div>
-    <div class="swiper-button-next"></div>
+    <!--<div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>-->
   </div>
 </section>
 
@@ -234,8 +230,8 @@
         <div class="grid-layout">
             <div class="notice-area">
                 <div class="area-header">
-                    <h3>공지사항</h3>
-                    <a href="notice.html" class="plus-btn">+</a>
+                    <h3>문의하기</h3>
+                    <a href="contact.html" class="plus-btn">+</a>
                 </div>
                 <div id="noticeList" class="notice-list-container">
                 </div>
@@ -275,9 +271,10 @@
   </div>
 
   <div class="footer-bottom">
-    © 2026 JC Medical. All rights reserved.
+    © 2025 JC Medical. All rights reserved.
   </div>
 </footer>
+<script src="js/app.js" defer></script>
+<script src="js/index.js"></script>
 </body>
-
 </html>

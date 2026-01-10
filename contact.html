@@ -1,13 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>문의하기</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCMedical</title>  
+  <meta name="description" content="JCMedical Mindray 전문 대리점 초음파기기, 심전도, 환자감시모니터 등 의료 현장의 최적 솔루션을 제공합니다.">  
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="JCMedical">  
+  <link rel="canonical" href="https://www.jcmedical.com/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <img src="img/logo_long.png" alt="JC Medical">
+        </a>
+        
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="about.html">회사소개</a></li>
+                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
+                <li class="nav-item"><a href="notice.html">공지사항</a></li>
+                <li class="nav-item"><a href="contact.html">고객지원</a></li>
+            </ul>
+        </nav>
+        
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </div>
+
+    <div class="mega-menu">
+        <div class="mega-inner">
+            <div class="mega-col">
+                <a href="about.html">회사소개</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="products.html?cat=ultrasound">초음파진단기</a>
+                <a href="products.html?cat=used">중고장비</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="notice.html">공지사항</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="contact.html">문의하기</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="sub-visual">
+    <div class="visual-text">
+        <h2>CONTACT</h2>
+        <p>문의하기</p>
+    </div>
+</section>
+
+<div class="content-wrapper">
     <section>
-        <h2 class="section-title">문의하기</h2>
         <form id="contactForm" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;">
             <input type="text" id="name" placeholder="이름" required style="padding: 10px;">
             <input type="email" id="email" placeholder="이메일" required style="padding: 10px;">
@@ -22,5 +79,6 @@
             alert("문의가 접수되었습니다. (실제 DB 연결 시 Supabase insert 로직 추가)");
         };
     </script>
+</div>
 </body>
 </html>
