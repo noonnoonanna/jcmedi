@@ -9,11 +9,13 @@
   <meta name="author" content="JCMedical">  
   <link rel="canonical" href="https://www.jcmedical.com/">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/about.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/app.js" defer></script>
   <script src="js/index.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>
 </head>
 <body>
 <header>
@@ -166,6 +168,34 @@
 			</div>
 		</div>
 	</section>
+	
+	<section id="location" class="about-section">
+		<div class="container">
+			<h3 class="content-title">오시는 길</h3>
+			
+			<div class="location-wrapper">
+				<div id="map" class="map-area"></div>
+	
+				<div class="location-info">
+					<div class="info-item">
+						<span class="info-label">ADDRESS</span>
+						<p>경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호</p>
+					</div>
+					<div class="info-item">
+						<span class="info-label">TEL</span>
+						<p>070-4651-5088 | 010-9474-6127</p>
+					</div>
+					<div class="info-item">
+						<span class="info-label">EMAIL</span>
+						<p>jcmedi0826@naver.com</p>
+					</div>
+					<div class="info-btn-group">
+						<a href="https://map.kakao.com/link/to/제이씨메디칼,37.4020,127.1086" target="_blank" class="btn-map-link">길찾기 바로가기</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
 </div>
 
@@ -196,5 +226,33 @@
     © 2025 JC Medical. All rights reserved.
   </div>
 </footer>
+<script>
+window.onload = function() {
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+        mapOption = { 
+            center: new kakao.maps.LatLng(37.4020, 127.1086), // 지도의 중심좌표 (위도, 경도)
+            level: 3 // 지도의 확대 레벨
+        };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도 생성
+
+    // 마커가 표시될 위치입니다 
+    var markerPosition  = new kakao.maps.LatLng(37.4020, 127.1086); 
+
+    // 마커를 생성합니다
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    // 마커가 지도 위에 표시되도록 설정합니다
+    marker.setMap(map);
+
+    // [선택] 지도 중심을 반응형으로 유지
+    window.addEventListener('resize', function() {
+        var relayout = new kakao.maps.LatLng(37.4020, 127.1086);
+        map.setCenter(relayout);
+    });
+};
+</script>
 </body>
 </html>

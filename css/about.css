@@ -1,0 +1,79 @@
+#location {
+    padding: 100px 0;
+    background-color: #fff;
+}
+
+.location-wrapper {
+    display: flex;
+    gap: 50px;
+    margin-top: 40px;
+}
+
+/* 지도 스타일 */
+.map-area {
+    flex: 1.5;
+    height: 450px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    filter: grayscale(0.2); /* 지도를 살짝 무채색으로 만들어 고급스럽게 연출 */
+}
+
+/* 정보 영역 스타일 */
+.location-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info-item {
+    margin-bottom: 35px;
+    border-bottom: 1px solid #f1f5f9;
+    padding-bottom: 20px;
+}
+
+.info-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 800;
+    color: #C5A36A; /* 포인트 골드 */
+    letter-spacing: 0.1em;
+    margin-bottom: 10px;
+}
+
+.info-item p {
+    font-size: 18px;
+    color: #2C4349; /* 포인트 딥 네이비 */
+    font-weight: 500;
+    margin: 0;
+    word-break: keep-all;
+}
+
+.btn-map-link {
+    display: inline-block;
+    padding: 15px 35px;
+    background-color: #2C4349;
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.btn-map-link:hover {
+    background-color: #1a2a2e;
+}
+
+/* 반응형 모바일 */
+@media (max-width: 992px) {
+    .location-wrapper {
+        flex-direction: column;
+    }
+    .map-area {
+        height: 300px;
+        order: 2; /* 지도를 아래로 */
+    }
+    .location-info {
+        order: 1; /* 정보를 위로 */
+    }
+}
