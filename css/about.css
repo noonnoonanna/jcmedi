@@ -68,12 +68,16 @@
 @media (max-width: 992px) {
     .location-wrapper {
         flex-direction: column;
+        gap: 30px;
     }
     .map-area {
-        height: 300px;
-        order: 2; /* 지도를 아래로 */
+        width: 100% !important; /* 너비 강제 고정 */
+        height: 350px; 
+        min-height: 350px; /* [추가] 최소 높이 보장 */
+        order: 2; 
     }
     .location-info {
-        order: 1; /* 정보를 위로 */
+        width: 100%;
+        order: 1; 
     }
 }
