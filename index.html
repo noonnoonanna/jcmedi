@@ -279,13 +279,13 @@ window.onload = function() {
     // 1. HTML의 id와 일치하도록 'kakaomap'으로 수정
     var mapContainer = document.getElementById('kakaomap'), 
         mapOption = { 
-            center: new kakao.maps.LatLng(37.4816024, 127.1437146), 
+            center: new kakao.maps.LatLng(37.4810, 127.1438), 
             level: 3 
         };
 
     var map = new kakao.maps.Map(mapContainer, mapOption); 
 
-    var markerPosition = new kakao.maps.LatLng(37.4816024, 127.1437146); 
+    var markerPosition = new kakao.maps.LatLng(37.4810, 127.1438); 
 
     // 2. 마커 생성
     var marker = new kakao.maps.Marker({
@@ -307,7 +307,7 @@ window.onload = function() {
 
     // 4. 지도 중심 유지 (반응형)
     window.addEventListener('resize', function() {
-        var relayout = new kakao.maps.LatLng(37.4816024, 127.1437146);
+        var relayout = new kakao.maps.LatLng(37.4810, 127.1438);
         map.setCenter(relayout);
     });
 };
