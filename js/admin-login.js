@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ✅ 로그인 성공
-    localStorage.setItem('admin_logged_in', 'true');
-    localStorage.setItem('admin_username', data[0].username);
+    sessionStorage.setItem('admin_logged_in', 'true');
+	sessionStorage.setItem('admin_login_time', Date.now().toString());
 
     alert('관리자 로그인 성공');
     window.location.href = 'index.html';

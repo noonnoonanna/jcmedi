@@ -9,6 +9,7 @@
   <meta name="author" content="JCMedical">  
   <link rel="canonical" href="https://www.jcmedical.com/">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/contact.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/app.js" defer></script>
@@ -65,23 +66,175 @@
 
 <div class="content-wrapper">
     <section>
-		<form 
-		name="contact"
-		method="POST"
-		data-netlify="true"
-		style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px;"
-		>
-		<!-- Netlify가 form 인식용 -->
-		<input type="hidden" name="form-name" value="contact">
-		
-		<input type="text" name="name" placeholder="이름" required style="padding: 10px;">
-		<input type="email" name="email" placeholder="이메일" required style="padding: 10px;">
-		<input type="tel" name="tel" placeholder="연락처" required style="padding: 10px;">
-		<textarea name="message" rows="5" placeholder="문의내용을 입력하세요" style="padding: 10px;"></textarea>
-		
-		<button type="submit" class="btn btn-point">문의 제출</button>
+		<form id="contactForm" name="contact" method="POST"	data-netlify="true" netlify-honeypot="bot-field">
+			<!-- Netlify가 form 인식용 -->
+			<input type="hidden" name="form-name" value="contact">
+			<!-- 봇만 채움 -->
+			<p class="hidden"><label>Don’t fill this out:<input name="bot-field"></label></p>
+			<div class="field row">
+				<label for="name"><span class="required">*</span>회사명/담당자명</label>
+				<input type="text" id="name" name="name" placeholder="회사명/담당자명" required style="padding: 10px;">
+			</div>
+			<div class="field row">
+				<label for="email"><span class="required">*</span>이메일</label>
+				<input type="email" id="email" name="email" placeholder="이메일" required style="padding: 10px;">
+			</div>
+			<div class="field row">
+				<label for="tel"><span class="required">*</span>연락처</label>
+				<input type="tel" id="tel" name="tel" placeholder="010-1234-5678" required style="padding: 10px;">
+			</div>
+			<div class="field row">
+				<label for="message"><span class="required">*</span>문의내용</label>
+				<textarea id="message" name="message" rows="5" placeholder="문의내용을 입력하세요" style="padding: 10px;"></textarea>
+			</div>
+			
+			<!-- 보안코드 -->
+			<div class="captcha">
+				<label for="captchaInput"><span class="required">*</span>보안코드</label>
+				
+				<div class="captcha-row">
+					<canvas id="captchaCanvas" width="110" height="40"></canvas>			
+					<button type="button" class="captcha-refresh" aria-label="새로고침">
+						⟳
+					</button>			
+					<input type="text" id="captchaInput" placeholder="보안코드 입력" required>
+				</div>
+			</div>
+	
+			<!-- 개인정보 수집 동의 -->
+			<div class="privacy field row">
+				<label><span class="required">*</span>개인정보 수집 동의</label>
+				
+				<div class="privacy-content-wrapper" style="flex: 1;">
+					<div class="privacy-box">
+						<p>1. 수집 목적: 문의 및 상담 응대</p>
+						<p>2. 수집 항목: 회사/단체명, 이름(담당자명), 연락처, 이메일, 상담내용</p>
+						<p>3. 보유 및 이용기간: 문의 및 상담 종료 후 6개월</p>
+						<p>4. 개인정보관리담당자: 070-4651-5088 / jcmedi0826@naver.com</p>
+					</div>
+					<label class="privacy-agree">
+						<input type="checkbox" id="privacyAgree" required>개인정보 수집 및 이용에 동의합니다.
+					</label>
+				</div>
+			</div>
+	
+			<button type="submit" class="btn btn-point">문의 제출</button>
 		</form>
+		
+		<div class="success-layer" id="success-panel" role="status" aria-live="assertive" aria-atomic="true" hidden>
+			<div class="success-card">
+				<svg class="check" viewBox="0 0 64 64" aria-hidden="true">
+					<circle class="ring" cx="32" cy="32" r="28" />
+					<path class="mark" d="M18 34l10 10 18-22" />
+				</svg>
+				<p class="msg"><b>제출이 완료되었습니다.</b><br>빠르게 확인 후 회신드리겠습니다.</p>
+				<button type="button" class="btn primary close-success">확인</button>
+			</div>
+		</div>
     </section>
 </div>
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-logo-area">
+      <img src="img/logo.png" alt="JC Medical" class="footer-logo">
+    </div>
+	
+	<div class="footer-text-area">
+      <p class="footer-info">
+        Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
+        Tel: 070-4651-5088 | 010-9474-6127 <br>
+        E-mail: jcmedi0826@naver.com
+      </p>
+	  
+	  <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <span class="divider">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2025 JC Medical. All rights reserved.
+  </div>
+</footer>
+<script>
+  const form = document.getElementById("contactForm");
+  const successPanel = document.getElementById("success-panel");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+	
+	if (captchaInput.value.toUpperCase() !== captchaCode) {
+      e.preventDefault();
+      alert("보안코드를 정확히 입력해 주세요.");
+      generateCaptcha();
+      captchaInput.value = "";
+      return;
+    }
+	
+    const formData = new FormData(form);
+
+    try {
+      await fetch("/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams(formData).toString(),
+      });
+
+      // 성공 레이어 표시
+      successPanel.hidden = false;
+      document.body.style.overflow = "hidden";
+      form.reset();
+
+    } catch (err) {
+      alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    }
+  });
+
+  document.querySelector(".close-success").addEventListener("click", () => {
+    successPanel.hidden = true;
+    document.body.style.overflow = "";
+  });
+
+  const canvas = document.getElementById("captchaCanvas");
+  const ctx = canvas.getContext("2d");
+  const refreshBtn = document.querySelector(".captcha-refresh");
+  const captchaInput = document.getElementById("captchaInput");
+
+  let captchaCode = "";
+
+  function generateCaptcha() {
+    captchaCode = Math.random().toString(36).substring(2, 6).toUpperCase();
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = "#f9fafb";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.font = "bold 20px Arial";
+    ctx.fillStyle = "#1f2937";
+    ctx.textBaseline = "middle";
+    ctx.fillText(captchaCode, 18, canvas.height / 2);
+
+    // 노이즈
+    for (let i = 0; i < 5; i++) {
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * 110, Math.random() * 40);
+      ctx.lineTo(Math.random() * 110, Math.random() * 40);
+      ctx.strokeStyle = "#d1d5db";
+      ctx.stroke();
+    }
+  }
+
+  refreshBtn.addEventListener("click", generateCaptcha);
+
+  generateCaptcha();
+
+</script>
+
 </body>
 </html>

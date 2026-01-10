@@ -3,22 +3,30 @@ const supabaseClient = supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxmbG5zc3d2bHhqcGlrcGhkY3h6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MjQ5NjMsImV4cCI6MjA4MzUwMDk2M30.QqoOA6qfv1fU11OMWl3vBw9EnZjmisSqK1Y0SO7ij0E'
 );
 
-async function checkAdmin() {
-  const { data } = await supabaseClient.auth.getUser();
-  if (data.user) {
-    document.querySelectorAll('.admin-only')
-      .forEach(el => el.classList.add('show'));
+(function () {
+  const LIMIT = 1000 * 60 * 60 * 2; // 2시간
+  const loginTime = sessionStorage.getItem('admin_login_time');
+  const isLoggedIn = sessionStorage.getItem('admin_logged_in') === 'true';
+
+  let valid = false;
+
+  if (isLoggedIn && loginTime) {
+    if (Date.now() - Number(loginTime) <= LIMIT) {
+      valid = true;
+    } else {
+      // 3시간 초과 → 조용히 로그아웃
+      sessionStorage.removeItem('admin_logged_in');
+      sessionStorage.removeItem('admin_login_time');
+    }
   }
-}
 
-function showLogin() {
-  const email = prompt('Admin Email');
-  const password = prompt('Password');
-  supabaseClient.auth.signInWithPassword({ email, password })
-    .then(() => location.reload());
-}
-
-checkAdmin();
+  // 버튼 제어
+  document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('[data-admin-only]').forEach(el => {
+      el.style.display = valid ? '' : 'none';
+    });
+  });
+})();
 
 // 1. 공지사항 데이터 로드 및 렌더링
 async function fetchMainNotices() {
@@ -62,12 +70,18 @@ window.onload = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-	console.log(23);
   const hamburger = document.querySelector('.hamburger');
   const nav = document.querySelector('.nav');
 
   hamburger.addEventListener('click', () => {
     nav.classList.toggle('active');
-	console.log(1);
+	hamburger.textContent = nav.classList.contains('active') ? '✕' : '☰';
+  });
+  
+  document.querySelectorAll('.nav a').forEach(link => {
+    link.addEventListener('click', () => {
+      nav.classList.remove('active');
+      hamburger.textContent = '☰';
+    });
   });
 });

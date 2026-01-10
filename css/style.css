@@ -69,7 +69,7 @@ header {
   top: 100%;
   left: 0;
   width: 100%;
-  background: #2C4349;
+  background: #00425f;
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.3s ease-in-out;
@@ -90,7 +90,7 @@ header:hover .mega-menu {
   grid-column: span 1; 
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 20px;
 }
 
 .mega-col:nth-child(1) { grid-column: 3; }
@@ -100,7 +100,7 @@ header:hover .mega-menu {
 
 .mega-col a {
   color: #dce5e3;
-  font-size: 15px;
+  font-size: 16px;
   transition: 0.2s;
 }
 
@@ -333,13 +333,13 @@ header:hover .mega-menu {
 
 /* 컨텐츠 공통 */
 .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 60px 16px; }
-.about-section { padding: 80px 0; }
+.about-section { padding: 120px 0; }
 
 .content-title { 
     font-size: 34px; 
     color: #0f172a;
     text-align: center; 
-    margin-bottom: 50px; 
+    margin-bottom: 80px; 
     position: relative;
     padding-bottom: 15px;
 	letter-spacing: -0.02em;
@@ -349,13 +349,13 @@ header:hover .mega-menu {
     position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin: 20px auto 0;
 }
 /*인사말*/
-.greeting-box {line-height: 40px; color:#333;}
+.greeting-box {line-height: 46px; color:#333;}
 
 /* 연혁 스타일 */
 .history-item {
     display: flex;
     gap: 30px;
-    margin-bottom: 30px; /* 항목 간 간격 넓힘 */
+    margin-bottom: 50px; /* 항목 간 간격 넓힘 */
     align-items: flex-start; /* 연도가 내용 첫 줄에 맞춰지도록 함 */
 }
 
@@ -483,7 +483,7 @@ header:hover .mega-menu {
 
 /* 5. 카드 헤더 & 숫자 */
 .card-header {
-    margin-bottom: 30px;
+    margin-bottom: 30px; width: 226px;
 }
 
 .card-num {
@@ -520,7 +520,7 @@ header:hover .mega-menu {
 }
 
 .product-list li {
-    padding: 12px 0;
+    padding: 20px 0;
     border-bottom: 1px solid #f1f5f9;
 }
 
@@ -546,7 +546,7 @@ header:hover .mega-menu {
 .service-flex {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 20px;
 }
 
 .service-item {
@@ -556,7 +556,7 @@ header:hover .mega-menu {
 }
 
 .service-item:hover {
-    border-color: #2563eb;
+    border-color: #C5A36A;
 }
 
 .service-item h5 {
@@ -629,9 +629,12 @@ header:hover .mega-menu {
 
 @media (max-width: 768px) {
     #policy { padding: 60px 0; }
+	#policy .container {padding: 0px 7px;}
     .content-title { font-size: 32px; margin-bottom: 40px; }
-    .policy-card { padding: 35px 25px; }
+    .policy-card { padding: 35px 17px; }
+	.main-desc {margin-left:0;}
     .strength-box p { font-size: 17px; }
+	.about-section {padding: 30px 0;}
 }
 
 /* 모바일 반응형 */
@@ -744,28 +747,52 @@ header:hover .mega-menu {
 }
 
 @media (max-width: 768px) {
+  .hamburger {
+    display: block;
+  }
+  
   .nav {
-    position: fixed;
-    top: 0;
-    right: -100%;
-    width: 80%;
-    height: 100vh;
+    grid-column: auto;
+    position: absolute;
+    top: 61px;          /* header 높이 */
+    left: 0;
+    width: 100%;
+    height: auto;
     background: #fff;
-    transition: right 0.3s ease;
-    padding-top: 80px;
-    z-index: 999;
+    display: none;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
   }
 
   .nav.active {
-    right: 0;
+    display: block !important;
   }
 
   .nav-menu {
+	display: flex;
     flex-direction: column;
-    gap: 30px;
-    padding-left: 30px;
+  }
+
+  .mega-menu {
+    display: none !important;
+  }
+
+  .header-inner {
+    overflow: visible;
+  }
+  
+  .nav-item {
+    height: 70px;
+    padding: 0 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    justify-content: flex-start;
+  }
+
+  .nav-item:last-child {
+    border-bottom: none;
   }
 }
+
 
 
 @media (max-width: 768px) {
