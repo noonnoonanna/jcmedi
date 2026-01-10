@@ -1,3 +1,10 @@
+:root {
+    --point-color: #2C4349;
+    --main-bg: #F6F8F9;
+    --section-bg: #EEF2F5;
+    --text-color: #333;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -141,7 +148,7 @@ header:hover .mega-menu {
 .hero p { font-size: 1.3rem; margin-bottom: 2.5rem; color: rgba(255,255,255,0.9); }
 .point  {color:#d1ffe9; font-size: 3.2rem;}
 .fx-underline{position:relative; color:#fff; text-shadow:4px 7px 7px #333;}
-.fx-underline::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:10px; background:linear-gradient(90deg,#b2f1d6,#2C4349); border-radius:6px; transform:scaleX(0); transform-origin: left; animation:underline 1.2s .5s ease-out forwards}
+.fx-underline::after{content:""; position:absolute; left:0; right:0; bottom:-3px; z-index: -2; height:10px; background:linear-gradient(90deg,#b2f1d6,#2C4349); transform:scaleX(0); transform-origin: left; animation:underline 1.2s .5s ease-out forwards}
 @keyframes underline{to{transform:scaleX(1)}}
 
 .heroSwiper {
@@ -258,85 +265,374 @@ header:hover .mega-menu {
 }
 
 /* 서브 비주얼 */
+/* --- 서브 비주얼 프리미엄 디자인 --- */
 .sub-visual {
     width: 100%;
-    height: 300px;
-    background: linear-gradient(rgba(44, 67, 73, 0.7), rgba(44, 67, 73, 0.7)), 
-                url('img/sub_bg.jpg') no-repeat center/cover;
+    height: 450px; /* 높이를 조금 더 확보하여 웅장함 부여 */
+    position: relative;
+    overflow: hidden;
+    background: #0f172a; /* 기본 베이스 컬러 (딥 네이비) */
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+/* 배경 이미지 및 다중 레이어 효과 */
+.sub-visual::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: 
+        /* 1. 고급스러운 블루 그라데이션 오버레이 */
+        linear-gradient(to right, rgba(15, 23, 42, 0.9) 20%, rgba(15, 23, 42, 0.2) 50%, rgba(15, 23, 42, 0.9) 80%),
+        /* 2. 위아래 어둡게 처리하여 시선 집중 */
+        linear-gradient(to bottom, rgba(15, 23, 42, 0.5), transparent, rgba(15, 23, 42, 0.8)),
+        /* 3. 실제 이미지 */
+        url('img/sub_bg.jpg') no-repeat center/cover;
+    z-index: 1;
+}
+
+/* 테크니컬한 그리드 패턴 추가 (의료/정밀 기기 느낌) */
+.sub-visual::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 30px 30px; /* 미세한 점 패턴 */
+    z-index: 2;
+    opacity: 0.5;
+}
+
+/* 텍스트 컨테이너 */
+.visual-text {
+    position: relative;
+    z-index: 3;
     text-align: center;
+    padding: 0 20px;
+}
+
+.visual-text h2 {
+    font-size: 56px; /* 더 크고 웅장하게 */
+    font-weight: 800;
+    letter-spacing: 0.15em; /* 자간을 넓혀 고급스럽게 */
+    margin-bottom: 15px;
     color: #fff;
+    text-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    text-transform: uppercase;
 }
 
-.visual-text h2 { font-size: 36px; font-weight: 700; margin-bottom: 10px; }
-.visual-text p { font-size: 18px; opacity: 0.9; }
-
-/* 서브 탭 메뉴 */
-.sub-tab {
-    background: #fff;
-    border-bottom: 1px solid #ddd;
-    position: sticky;
-    top: 80px; /* 헤더 높이에 맞게 조절 */
-    z-index: 90;
+.visual-text p {
+    font-size: 20px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.9);
+    letter-spacing: -0.01em;
+    word-break: keep-all;
+    position: relative;
+    display: inline-block;
 }
-
-.sub-tab ul {
-    display: flex;
-    justify-content: center;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.sub-tab li a {
-    display: block;
-    padding: 20px 40px;
-    font-weight: 600;
-    color: #666;
-    transition: 0.3s;
-}
-
-.sub-tab li a:hover { color: var(--point); border-bottom: 2px solid var(--point); }
 
 /* 컨텐츠 공통 */
 .content-wrapper { max-width: 1200px; margin: 0 auto; padding: 60px 16px; }
 .about-section { padding: 80px 0; }
+
 .content-title { 
-    font-size: 28px; 
-    color: var(--point); 
+    font-size: 34px; 
+    color: #0f172a;
     text-align: center; 
     margin-bottom: 50px; 
     position: relative;
     padding-bottom: 15px;
+	letter-spacing: -0.02em;
 }
 .content-title::after {
-    content: ''; width: 40px; height: 2px; background: var(--point);
-    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    content: ''; width: 40px; height: 3px; background: #2C4349; /*#2563eb;*/ display: block;
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); margin: 20px auto 0;
 }
+/*인사말*/
+.greeting-box {line-height: 40px; color:#333;}
 
 /* 연혁 스타일 */
-.bg-alt-section { background-color: #EEF2F5; width: 100vw; margin-left: calc(-50vw + 50%); padding: 80px 16px; }
-.history-item { display: flex; gap: 30px; margin-bottom: 20px; font-size: 18px; }
-.history-item .year { font-weight: 800; color: var(--point); min-width: 80px; }
+.history-item {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 30px; /* 항목 간 간격 넓힘 */
+    align-items: flex-start; /* 연도가 내용 첫 줄에 맞춰지도록 함 */
+}
+
+/* 연도 스타일 (파란색 아이콘 효과 포함) */
+.history-item .year {
+	font-size:25px;
+    font-weight: 800;
+    color: #2C4349; 
+    min-width: 80px;
+    flex-shrink: 0; /* 연도 영역이 좁아지지 않게 고정 */
+}
+
+/* 연도 앞의 꽃모양/별모양 아이콘 */
+.history-item .year::before {
+    content: "|";
+    font-size: 18px;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+/* 내용 텍스트 스타일 */
+.history-item p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #333;
+    font-weight: 500;
+}
+
+.history-content {
+    display: flex;
+    flex-direction: column; /* 내용들을 위아래(세로)로 배치 */
+    gap: 10px; /* 내용 줄 사이의 간격 */
+}
+
+.history-content p {
+    margin: 0; /* 기본 마진 제거 */
+    font-size: 18px;
+    line-height: 1.4;
+}
+
+/* 반응형 대응: 화면이 작아지면 왼쪽 여백 조절 */
+@media (max-width: 768px) {
+    .history-list { padding-left: 0; }
+    .history-list::before { position: static; display: block; margin-bottom: 30px; }
+    .history-item { gap: 20px; }
+}
+
+@media (max-width: 768px) {
+    .sub-visual {
+        height: 350px; /* 모바일에서는 높이 축소 */
+    }
+
+    .visual-text h2 {
+        font-size: 32px;
+        letter-spacing: 0.1em;
+    }
+
+    .visual-text p {
+        font-size: 16px;
+        line-height: 1.5;
+        padding: 0 10px;
+    }
+    
+    .visual-text::before {
+        margin-bottom: 15px;
+    }
+}
 
 /* 경영방침 그리드 */
+/* --- 프리미엄 경영방침 섹션 스타일 --- */
+
+/* 1. 섹션 전체 배경 및 레이아웃 */
+#policy {
+    padding: 100px 0;
+    background-color: #ffffff; /* 순백색 배경으로 깨끗한 이미지 강조 */
+    color: #1e293b;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+}
+
+#policy .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+/* 3. 그리드 레이아웃 */
 .policy-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
 }
+
+/* 4. 카드 디자인: 무게감 있는 섀도우와 미세한 보더 */
 .policy-card {
-    background: #fff;
-    padding: 40px 30px;
-    text-align: center;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    transition: 0.3s;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0; /* 곡선을 줄여 직선의 신뢰감 강조 */
+    padding: 50px 40px;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    position: relative;
+    overflow: hidden;
 }
-.policy-card:hover { transform: translateY(-10px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-.policy-card .icon { font-size: 40px; margin-bottom: 20px; }
-.policy-card h5 { font-size: 20px; margin-bottom: 15px; color: var(--point); }
+
+.policy-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    transition: background 0.3s;
+}
+
+.policy-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1);
+    border-color: #cbd5e1;
+}
+
+.policy-card:hover::before {
+    background: #C5A36A; /* 호버 시 상단 포인트 라인 */
+}
+
+/* 5. 카드 헤더 & 숫자 */
+.card-header {
+    margin-bottom: 30px;
+}
+
+.card-num {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #C5A36A;
+    margin-bottom: 10px;
+    letter-spacing: 0.1em;
+}
+
+.card-header h4 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #0f172a;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* 6. 본문 텍스트 */
+.main-desc {
+    font-size: 17px;
+    line-height: 1.7;
+    color: #475569; /* 부드러운 다크 그레이 */
+    margin-bottom: 30px;
+    word-break: keep-all;
+}
+
+/* 7. 리스트 & 상세 항목 스타일 */
+.product-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 30px;
+}
+
+.product-list li {
+    padding: 12px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.product-list li strong {
+    display: block;
+    font-size: 16px;
+    color: #1e293b;
+    margin-bottom: 4px;
+}
+
+.product-list li span {
+    font-size: 14px;
+    color: #64748b;
+}
+
+.sub-footer {
+    font-size: 14px;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+/* 8. 서비스 섹션 아이템 (박스 형태) */
+.service-flex {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.service-item {
+    border-left: 3px solid #e2e8f0;
+    padding-left: 20px;
+    transition: border-color 0.3s;
+}
+
+.service-item:hover {
+    border-color: #2563eb;
+}
+
+.service-item h5 {
+    font-size: 17px;
+    color: #0f172a;
+    margin-bottom: 5px;
+}
+
+.service-item p {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+/* 9. 하이라이트 카드 (실적) - 무게감 있는 반전 디자인 */
+.policy-card.highlight {
+    grid-column: span 2;
+    background: #2C4349; /*#0f172a; /* 아주 깊은 네이비 */
+    border: none;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.policy-card.highlight .card-header h4,
+.policy-card.highlight .main-desc {
+    color: #ffffff;
+}
+
+.policy-card.highlight .card-num {
+    color: #C5A36A;
+}
+
+.strength-box {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-left: 2px solid #C5A36A;
+    margin-left: 40px;
+}
+
+.strength-box p {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.strength-box strong {
+    color: #C5A36A;
+}
+
+/* 10. 반응형 웹 (Responsive) */
+@media (max-width: 1024px) {
+    .policy-grid {
+        grid-template-columns: 1fr;
+    }
+    .policy-card.highlight {
+        grid-column: span 1;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .strength-box {
+        margin-left: 0;
+        margin-top: 30px;
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    #policy { padding: 60px 0; }
+    .content-title { font-size: 32px; margin-bottom: 40px; }
+    .policy-card { padding: 35px 25px; }
+    .strength-box p { font-size: 17px; }
+}
 
 /* 모바일 반응형 */
 @media (max-width: 850px) {
