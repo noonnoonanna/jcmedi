@@ -177,29 +177,38 @@
 	
     const formData = new FormData(form);
 
-    try {
-      await fetch("/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams(formData).toString(),
-      });
+	try {
+		const response = await fetch("/", {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: new URLSearchParams(formData).toString(),
+    });
 
-      // 성공 레이어 표시
-      successPanel.hidden = false;
+    if (response.ok) {
+      // 1. 성공 레이어 표시 (hidden 속성 제거)
+      successPanel.removeAttribute('hidden');
+      
+      // 2. 배경 스크롤 방지
       document.body.style.overflow = "hidden";
+      
+      // 3. 폼 초기화 및 캡차 재생성
       form.reset();
-
-    } catch (err) {
-      alert("전송 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      if (typeof generateCaptcha === "function") generateCaptcha();
+    } else {
+      throw new Error("서버 응답 오류");
     }
+
+  } catch (err) {
+    console.error(err);
+    alert("전송 중 오류가 발생했습니다. jcmedi0826@naver.com으로 직접 문의 부탁드립니다.");
+  }
   });
 
-  document.querySelector(".close-success").addEventListener("click", () => {
-    successPanel.hidden = true;
-    document.body.style.overflow = "";
-  });
+// 닫기 버튼 이벤트
+document.querySelector(".close-success").addEventListener("click", () => {
+  successPanel.setAttribute('hidden', '');
+  document.body.style.overflow = "";
+});
 
   const canvas = document.getElementById("captchaCanvas");
   const ctx = canvas.getContext("2d");
