@@ -1,27 +1,111 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRODUCT | JC Medical</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCMedical</title>  
+  <meta name="description" content="JCMedical Mindray 전문 대리점 초음파기기, 심전도, 환자감시모니터 등 의료 현장의 최적 솔루션을 제공합니다.">  
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="JCMedical">  
+  <link rel="canonical" href="https://www.jcmedical.com/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/products.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js" defer></script>
+  <script src="js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
-    <section class="sub-visual">
-        <div class="visual-text">
-            <h2>PRODUCT</h2>
-            <p>JC Medical이 제안하는 최첨단 의료 솔루션입니다.</p>
-        </div>
-    </section>
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <img src="img/logo_long.png" alt="JC Medical">
+        </a>
+        
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item"><a href="about.html">회사소개</a></li>
+                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
+                <li class="nav-item"><a href="notice.html">공지사항</a></li>
+                <li class="nav-item"><a href="contact.html">문의하기</a></li>
+            </ul>
+        </nav>
+        
+        <div class="hamburger" onclick="toggleMenu()">☰</div>
+    </div>
 
-    <section class="content-wrapper">
+    <div class="mega-menu">
+        <div class="mega-inner">
+            <div class="mega-col">
+                <a href="about.html">회사소개</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="products.html?cat=ultrasound">초음파진단기</a>
+                <a href="products.html?cat=used">중고장비</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="notice.html">공지사항</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="contact.html">문의하기</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="sub-visual">
+    <div class="visual-text">
+        <h2>PRODUCT</h2>
+        <p>JC Medical이 제안하는 최첨단 의료 솔루션을 확인하세요.</p>
+    </div>
+</section>
+
+<div class="content-wrapper">
+    <section>
         <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
             <p>총 <span id="product-count" style="color:var(--point); font-weight:700;">0</span>개의 제품이 있습니다.</p>
             <a href="product_write.html" id="admin-write-btn" class="btn btn-point admin-only hide">제품 등록</a>
+			<button id="addProductBtn" data-admin-only class="btn-primary">
+    신규 제품 등록
+  </button>
         </div>
 
-        <div id="product-grid" class="grid">
+<div class="product-section">
+    <!-- JS로 렌더링될 영역 -->
+    <div id="productList" class="product-grid">
+        <!-- 예시 카드 1 -->
+        <div class="product-card">
+            <div class="thumb">
+                <img src="img/product1.jpg" alt="초음파 진단기">
             </div>
+            <div class="info">
+                <span class="category">Ultrasound</span>
+                <h4>Mindray DC-80 Insight</h4>
+                <p class="desc">혁신적인 X-Insight 기술이 적용된 프리미엄 초음파 시스템입니다.</p>
+                <div class="more-btn">상세보기</div>
+            </div>
+        </div>
+
+        <!-- 예시 카드 2 -->
+        <div class="product-card">
+            <div class="thumb">
+                <img src="img/product2.jpg" alt="환자 감시 모니터">
+            </div>
+            <div class="info">
+                <span class="category">Patient Monitor</span>
+                <h4>BeneVision N Series</h4>
+                <p class="desc">정밀한 모니터링과 직관적인 UI를 제공하는 환자 감시 솔루션입니다.</p>
+                <div class="more-btn">상세보기</div>
+            </div>
+        </div>
+        
+        <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
+    </div>
+</div>
     </section>
 
     <script src="app.js"></script>
@@ -47,6 +131,37 @@
             `).join('');
         }
         window.addEventListener('DOMContentLoaded', loadProducts);
-    </script>
+    </script>	    
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-logo-area">
+      <img src="img/logo.png" alt="JC Medical" class="footer-logo">
+    </div>
+	
+	<div class="footer-text-area">
+      <p class="footer-info">
+        Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
+        Tel: 070-4651-5088 | 010-9474-6127 <br>
+        E-mail: jcmedi0826@naver.com
+      </p>
+	  
+	  <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <span class="divider">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2025 JC Medical. All rights reserved.
+  </div>
+</footer>
+<script>
+console.log(isLoggedIn);
+</script>
 </body>
 </html>
