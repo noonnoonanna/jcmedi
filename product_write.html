@@ -1,61 +1,191 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <title>제품 등록 | JC Medical</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JCMedical</title>  
+  <meta name="description" content="JCMedical Mindray 전문 대리점 초음파기기, 심전도, 환자감시모니터 등 의료 현장의 최적 솔루션을 제공합니다.">  
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="JCMedical">  
+  <link rel="canonical" href="https://www.jcmedical.com/">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/products.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app.js" defer></script>
 </head>
 <body>
-    <section class="content-wrapper">
-        <h2 class="section-title">제품 등록</h2>
+<header>
+    <div class="header-inner">
+        <a href="index.html" class="logo">
+            <img src="img/logo_long.png" alt="JC Medical">
+        </a>
         
-        <form id="write-form" style="display:flex; flex-direction:column; gap:20px;">
-            <input type="text" id="p-title" placeholder="제품명을 입력하세요" required style="padding:15px; font-size:16px;">
-            
-            <div style="background:#fff;">
-                <label style="display:block; margin-bottom:10px; font-weight:600;">대표 이미지 첨부</label>
-                <input type="file" id="p-image" accept="image/*">
-            </div>
+        <nav class="nav">
+            <ul class="nav-menu">
+                <li class="nav-item">
+					<a href="#">회사소개 <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="about.html">인사말</a></li>
+						<li><a href="about.html#location">오시는길</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="products.html?cat=ultrasound">초음파진단기</a></li>
+						<li><a href="products.html?cat=freq">고주파기기</a></li>
+						<li><a href="products.html?cat=used">중고장비</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="notice.html">공지사항</a>
+				</li>
+                <li class="nav-item">
+					<a href="contact.html">문의하기</a>
+				</li>
+            </ul>
+        </nav>
+		
+		<div class="partner-logo">
+			<img src="img/min_logo.png" alt="Mindray">
+		</div>
+        
+        <div class="hamburger">☰</div>
+    </div>
 
-            <div id="editor" style="height: 400px; background:#fff;"></div>
-
-            <div style="text-align:center; margin-top:30px; display:flex; gap:10px; justify-content:center;">
-                <button type="button" class="btn" onclick="history.back()" style="background:#ccc;">취소</button>
-                <button type="submit" class="btn btn-point">제품 저장하기</button>
+    <div class="mega-menu">
+        <div class="mega-inner">
+            <div class="mega-col">
+                <a href="about.html">인사말</a>
+				<a href="about.html#location">오시는길</a>
             </div>
-        </form>
+        
+            <div class="mega-col">
+                <a href="products.html?cat=ultrasound">초음파진단기</a>
+				<a href="products.html?cat=freq">고주파기기</a>
+                <a href="products.html?cat=used">중고장비</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="notice.html">공지사항</a>
+            </div>
+        
+            <div class="mega-col">
+                <a href="contact.html">문의하기</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="sub-visual">
+    <div class="visual-text">
+        <h2>PRODUCT</h2>
+        <p>JC Medical이 제안하는 최첨단 의료 솔루션을 확인하세요.</p>
+    </div>
+</section>
+
+<div class="content-wrapper">
+    <!-- JS로 렌더링될 영역 -->
+    <div id="productList" class="product-grid">
+        <!-- 예시 카드 1 -->
+        <div class="product-card">
+            <div class="thumb">
+                <img src="img/product1.jpg" alt="초음파 진단기">
+            </div>
+            <div class="info">
+                <span class="category">Ultrasound</span>
+                <h4>Mindray DC-80 Insight</h4>
+                <p class="desc">혁신적인 X-Insight 기술이 적용된 프리미엄 초음파 시스템입니다.</p>
+                <div class="more-btn">상세보기</div>
+            </div>
+        </div>
+
+        <!-- 예시 카드 2 -->
+        <div class="product-card">
+            <div class="thumb">
+                <img src="img/product2.jpg" alt="환자 감시 모니터">
+            </div>
+            <div class="info">
+                <span class="category">Patient Monitor</span>
+                <h4>BeneVision N Series</h4>
+                <p class="desc">정밀한 모니터링과 직관적인 UI를 제공하는 환자 감시 솔루션입니다.</p>
+                <div class="more-btn">상세보기</div>
+            </div>
+        </div>
+        
+        <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
+    </div>
+</div>
     </section>
 
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script src="app.js"></script>
     <script>
-        // 에디터 초기화
-        const quill = new Quill('#editor', { theme: 'snow', modules: { toolbar: [['bold', 'italic'], ['image', 'link'], [{ 'list': 'ordered'}, { 'list': 'bullet' }]] }});
+	// 에디터 설정
+const quill = new Quill('#editor', {
+  theme: 'snow',
+  modules: {
+    toolbar: [
+      [{ 'size': ['small', false, 'large', 'huge'] }], // 크기 조절
+      ['bold', 'italic', 'underline'],               // 기본 서식
+      [{ 'color': [] }, { 'background': [] }],       // 글자색, 배경색
+      ['image', 'link'],                             // 이미지, 링크
+      ['clean']                                      // 서식 지우기
+    ]
+  }
+});
 
-        document.getElementById('write-form').onsubmit = async (e) => {
-            e.preventDefault();
-            const title = document.getElementById('p-title').value;
-            const content = quill.root.innerHTML;
-            const file = document.getElementById('p-image').files[0];
+        async function loadProducts() {
+            const isAdmin = await checkAdmin();
+            const { data, count } = await _supabase
+                .from('products')
+                .select('*', { count: 'exact' })
+                .order('created_at', { ascending: false });
+
+            document.getElementById('product-count').innerText = count;
+            const grid = document.getElementById('product-grid');
             
-            let imageUrl = '';
-            if (file) {
-                const fileName = `${Date.now()}_${file.name}`;
-                const { data, error } = await _supabase.storage.from('product-images').upload(fileName, file);
-                if (data) {
-                    const { data: urlData } = _supabase.storage.from('product-images').getPublicUrl(fileName);
-                    imageUrl = urlData.publicUrl;
-                }
-            }
+            grid.innerHTML = data.map(p => `
+                <div class="card product-card" onclick="location.href='product_view.html?id=${p.id}'" style="cursor:pointer;">
+                    <div class="thumb" style="height:250px; background:url('${p.image_url || 'img/no-image.png'}') no-repeat center/cover; border-radius:8px 8px 0 0;"></div>
+                    <div class="info" style="padding:20px;">
+                        <h4 style="font-size:18px; margin-bottom:10px;">${p.title}</h4>
+                        <p style="color:#666; font-size:14px;">등록일: ${p.created_at.split('T')[0]}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+        window.addEventListener('DOMContentLoaded', loadProducts);
+    </script>	    
+</div>
+<footer class="site-footer">
+  <div class="footer-inner">
 
-            const { error } = await _supabase.from('products').insert([{ title, content, image_url: imageUrl }]);
-            if (!error) {
-                alert("등록되었습니다.");
-                location.href = 'product_list.html';
-            }
-        };
-    </script>
+    <div class="footer-logo-area">
+      <img src="img/logo.png" alt="JC Medical" class="footer-logo">
+    </div>
+	
+	<div class="footer-text-area">
+      <p class="footer-info">
+        Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
+        Tel: 070-4651-5088 | 010-9474-6127 <br>
+        E-mail: jcmedi0826@naver.com<Br>
+		사업자번호: 512-13-30045
+      </p>
+	  
+	  <div class="footer-links">
+      <a href="terms.html">이용약관</a>
+      <span class="divider">|</span>
+      <a href="privacy.html">개인정보처리방침</a>
+    </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    © 2025 JC Medical. All rights reserved.
+  </div>
+</footer>
+<script>
+console.log(isLoggedIn);
+</script>
 </body>
 </html>

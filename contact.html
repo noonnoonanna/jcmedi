@@ -10,11 +10,8 @@
   <link rel="canonical" href="https://www.jcmedical.com/">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/contact.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/app.js" defer></script>
-  <script src="js/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
 <header>
@@ -25,24 +22,47 @@
         
         <nav class="nav">
             <ul class="nav-menu">
-                <li class="nav-item"><a href="about.html">회사소개</a></li>
-                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
-                <li class="nav-item"><a href="notice.html">공지사항</a></li>
-                <li class="nav-item"><a href="contact.html">문의하기</a></li>
+                <li class="nav-item">
+					<a href="#">회사소개 <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="about.html">인사말</a></li>
+						<li><a href="about.html#location">오시는길</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="products.html?cat=ultrasound">초음파진단기</a></li>
+						<li><a href="products.html?cat=freq">고주파기기</a></li>
+						<li><a href="products.html?cat=used">중고장비</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="notice.html">공지사항</a>
+				</li>
+                <li class="nav-item">
+					<a href="contact.html">문의하기</a>
+				</li>
             </ul>
         </nav>
+		
+		<div class="partner-logo">
+			<img src="img/min_logo.png" alt="Mindray">
+		</div>
         
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <div class="hamburger">☰</div>
     </div>
 
     <div class="mega-menu">
         <div class="mega-inner">
             <div class="mega-col">
-                <a href="about.html">회사소개</a>
+                <a href="about.html">인사말</a>
+				<a href="about.html#location">오시는길</a>
             </div>
         
             <div class="mega-col">
                 <a href="products.html?cat=ultrasound">초음파진단기</a>
+				<a href="products.html?cat=freq">고주파기기</a>
                 <a href="products.html?cat=used">중고장비</a>
             </div>
         
@@ -72,8 +92,8 @@
 			<!-- 봇만 채움 -->
 			<p class="hidden"><label>Don’t fill this out:<input name="bot-field"></label></p>
 			<div class="field row">
-				<label for="name"><span class="required">*</span>회사명/담당자명</label>
-				<input type="text" id="name" name="name" placeholder="회사명/담당자명" required style="padding: 10px;">
+				<label for="name"><span class="required">*</span>회사명/병원명</label>
+				<input type="text" id="name" name="name" placeholder="회사명/병원명" required style="padding: 10px;">
 			</div>
 			<div class="field row">
 				<label for="email"><span class="required">*</span>이메일</label>
@@ -144,7 +164,8 @@
       <p class="footer-info">
         Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
         Tel: 070-4651-5088 | 010-9474-6127 <br>
-        E-mail: jcmedi0826@naver.com
+        E-mail: jcmedi0826@naver.com<Br>
+		사업자번호: 512-13-30045
       </p>
 	  
 	  <div class="footer-links">

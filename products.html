@@ -10,11 +10,8 @@
   <link rel="canonical" href="https://www.jcmedical.com/">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/products.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/app.js" defer></script>
-  <script src="js/index.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 </head>
 <body>
 <header>
@@ -25,24 +22,47 @@
         
         <nav class="nav">
             <ul class="nav-menu">
-                <li class="nav-item"><a href="about.html">회사소개</a></li>
-                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
-                <li class="nav-item"><a href="notice.html">공지사항</a></li>
-                <li class="nav-item"><a href="contact.html">문의하기</a></li>
+                <li class="nav-item">
+					<a href="#">회사소개 <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="about.html">인사말</a></li>
+						<li><a href="about.html#location">오시는길</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="products.html?cat=ultrasound">초음파진단기</a></li>
+						<li><a href="products.html?cat=freq">고주파기기</a></li>
+						<li><a href="products.html?cat=used">중고장비</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="notice.html">공지사항</a>
+				</li>
+                <li class="nav-item">
+					<a href="contact.html">문의하기</a>
+				</li>
             </ul>
         </nav>
+		
+		<div class="partner-logo">
+			<img src="img/min_logo.png" alt="Mindray">
+		</div>
         
-        <div class="hamburger" onclick="toggleMenu()">☰</div>
+        <div class="hamburger">☰</div>
     </div>
 
     <div class="mega-menu">
         <div class="mega-inner">
             <div class="mega-col">
-                <a href="about.html">회사소개</a>
+                <a href="about.html">인사말</a>
+				<a href="about.html#location">오시는길</a>
             </div>
         
             <div class="mega-col">
                 <a href="products.html?cat=ultrasound">초음파진단기</a>
+				<a href="products.html?cat=freq">고주파기기</a>
                 <a href="products.html?cat=used">중고장비</a>
             </div>
         
@@ -108,27 +128,32 @@
 </div>
     </section>
 
-    <script src="app.js"></script>
     <script>
         async function loadProducts() {
-            const isAdmin = await checkAdmin();
-            const { data, count } = await _supabase
-                .from('products')
-                .select('*', { count: 'exact' })
-                .order('created_at', { ascending: false });
 
+            const { data, error, count } = await supabaseClient
+                .from('products')
+                .select('*', { count: 'exact' });
+			if (error) {
+      console.error('데이터 로드 실패:', error.message);
+      return;
+    }
+	
             document.getElementById('product-count').innerText = count;
-            const grid = document.getElementById('product-grid');
-            
+            const grid = document.getElementById('productList');
+			const countElement = document.getElementById('product-count');
+            if (grid) {
             grid.innerHTML = data.map(p => `
                 <div class="card product-card" onclick="location.href='product_view.html?id=${p.id}'" style="cursor:pointer;">
                     <div class="thumb" style="height:250px; background:url('${p.image_url || 'img/no-image.png'}') no-repeat center/cover; border-radius:8px 8px 0 0;"></div>
                     <div class="info" style="padding:20px;">
                         <h4 style="font-size:18px; margin-bottom:10px;">${p.title}</h4>
-                        <p style="color:#666; font-size:14px;">등록일: ${p.created_at.split('T')[0]}</p>
                     </div>
                 </div>
             `).join('');
+			}else {
+        console.error("ID가 'product-grid'인 요소를 찾을 수 없습니다.");
+    }
         }
         window.addEventListener('DOMContentLoaded', loadProducts);
     </script>	    
@@ -144,7 +169,8 @@
       <p class="footer-info">
         Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
         Tel: 070-4651-5088 | 010-9474-6127 <br>
-        E-mail: jcmedi0826@naver.com
+        E-mail: jcmedi0826@naver.com<Br>
+		사업자번호: 512-13-30045
       </p>
 	  
 	  <div class="footer-links">
@@ -161,7 +187,7 @@
   </div>
 </footer>
 <script>
-console.log(isLoggedIn);
+
 </script>
 </body>
 </html>

@@ -23,12 +23,33 @@
         
         <nav class="nav">
             <ul class="nav-menu">
-                <li class="nav-item"><a href="about.html">회사소개</a></li>
-                <li class="nav-item"><a href="products.html?cat=ultrasound">PRODUCT</a></li>
-                <li class="nav-item"><a href="notice.html">공지사항</a></li>
-                <li class="nav-item"><a href="contact.html">문의하기</a></li>
+                <li class="nav-item">
+					<a href="#">회사소개 <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="about.html">인사말</a></li>
+						<li><a href="about.html#location">오시는길</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
+					<ul class="mobile-sub">
+						<li><a href="products.html?cat=ultrasound">초음파진단기</a></li>
+						<li><a href="products.html?cat=freq">고주파기기</a></li>
+						<li><a href="products.html?cat=used">중고장비</a></li>
+					</ul>
+				</li>
+                <li class="nav-item">
+					<a href="notice.html">공지사항</a>
+				</li>
+                <li class="nav-item">
+					<a href="contact.html">문의하기</a>
+				</li>
             </ul>
         </nav>
+		
+		<div class="partner-logo">
+			<img src="img/min_logo.png" alt="Mindray">
+		</div>
         
         <div class="hamburger">☰</div>
     </div>
@@ -36,11 +57,13 @@
     <div class="mega-menu">
         <div class="mega-inner">
             <div class="mega-col">
-                <a href="about.html">회사소개</a>
+                <a href="about.html">인사말</a>
+				<a href="about.html#location">오시는길</a>
             </div>
         
             <div class="mega-col">
                 <a href="products.html?cat=ultrasound">초음파진단기</a>
+				<a href="products.html?cat=freq">고주파기기</a>
                 <a href="products.html?cat=used">중고장비</a>
             </div>
         
@@ -157,6 +180,7 @@
     { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기' },
     { img: 'img/pro2_con.jpg', name: 'Consona 시리즈' },
     { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M' },
+	{ img: 'img/pro4_torr.jpg', name: 'TORR RF' },
   ];
 
   products.forEach(p => {
@@ -172,9 +196,15 @@
 <script>
   const productSwiper = new Swiper('.productSwiper', {
     slidesPerView: 3,
-    spaceBetween: 24,
+    spaceBetween: 40,
     loop: true,
-
+  
+	autoplay: {
+      delay: 3000,              // 3초마다 슬라이드
+      disableOnInteraction: false, // 버튼 눌러도 자동 계속
+      pauseOnMouseEnter: true,  // 마우스 올리면 멈춤 (선택)
+    },
+	
     navigation: {
       nextEl: '.product-next',
       prevEl: '.product-prev',
@@ -182,7 +212,9 @@
 
     breakpoints: {
       0: {
-        slidesPerView: 1,
+        slidesPerView: 1.2,
+		spaceBetween: 15,
+        centeredSlides: true,
       },
       768: {
         slidesPerView: 2,
@@ -197,7 +229,7 @@
 <style>
 /* Swiper */
 .productSwiper {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 16px;
 }
@@ -213,14 +245,54 @@
 /* 이미지 */
 .productSwiper .swiper-slide img {
   width: 100%;
-  aspect-ratio: 4 / 3;   /* 이미지 비율 고정 */
+  aspect-ratio: 3 / 4;   /* 이미지 비율 고정 */
   object-fit: cover;
 }
 
-/* 좌우 버튼 */
-.product-prev,
-.product-next {
-  color: #2C4349;
+.productSwiper .swiper-button-next,
+.productSwiper .swiper-button-prev {
+  color: white;
+  width: 48px;
+  height: 48px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* 아이콘 크기 */
+.productSwiper .swiper-button-next::after,
+.productSwiper .swiper-button-prev::after {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* 좌우 위치 */
+.productSwiper .swiper-button-prev {
+  left: 24px;
+}
+
+.productSwiper .swiper-button-next {
+  right: 24px;
+}
+
+/* hover 시 세련되게 */
+.productSwiper .swiper-button-next:hover,
+.productSwiper .swiper-button-prev:hover {
+  background: rgba(0, 0, 0, 0.55);
+}
+
+@media (max-width: 768px) {  
+  .productSwiper .swiper-button-next,
+  .productSwiper .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+  }
+
+  .productSwiper .swiper-button-next::after,
+  .productSwiper .swiper-button-prev::after {
+    font-size: 14px;
+  }
 }
 </style>
 
@@ -241,10 +313,13 @@
             <li><span>✓</span> 유지보수 및 기술 지원 서비스</li>
             <li><span>✓</span> 신규 비즈니스 협업 제안</li>
         </ul>
-
-        <div class="contact-bottom">
-            <a href="contact.html" class="btn-partner">문의하기 바로가기</a>
-        </div>
+		
+		<div class="contact-bottom">
+			<div class="btn-group">
+				<a href="contact.html" class="btn-partner btn-email">이메일 문의하기</a>
+				<a href="http://pf.kakao.com/_pdvjn/chat" target="_blank" class="btn-partner btn-kakao">카카오 문의하기</a>
+			</div>
+		</div>
     </div>
 </div>
 
@@ -269,7 +344,8 @@
       <p class="footer-info">
         Address: 경기도 성남시 수정구 위례서로24, 위례행복빌딩3층 303호<br>
         Tel: 070-4651-5088 | 010-9474-6127 <br>
-        E-mail: jcmedi0826@naver.com
+        E-mail: jcmedi0826@naver.com<Br>
+		사업자번호: 512-13-30045
       </p>
 	  
 	  <div class="footer-links">
@@ -384,6 +460,5 @@ window.onload = function() {
 }
 </style>
 <script src="js/app.js" defer></script>
-<script src="js/index.js"></script>
 </body>
 </html>
