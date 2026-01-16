@@ -11,10 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const username = document.getElementById('userid').value.trim();
     const password = document.getElementById('password').value;
-
-    const { data, error } = await supabaseClient.rpc('admin_login', {
-      p_username: username,
-      p_password: password
+	
+	const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email: username,
+        password: password,
     });
 
     // ❌ 서버 오류
