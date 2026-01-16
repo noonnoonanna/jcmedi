@@ -91,10 +91,10 @@
 <div class="content-wrapper">
 	<div class="write-container">
 		<div class="write-header">
-			<h3>제품 등록하기</h3>
+			<h3>제품 정보 수정</h3>
 		</div>
 	
-		<form id="productForm" class="write-form">
+		<form id="editForm" class="write-form">
 			<div class="form-grid">
 				<div class="input-group">
 					<label for="category">카테고리</label>
@@ -110,22 +110,18 @@
 				</div>
 				<div class="input-group full-width">
 					<label for="url">상세 연결 URL (외부 링크)</label>
-					<input id="url" placeholder="https://example.com">
+					<input type="url" id="url" placeholder="https://example.com">
 				</div>
 			</div>
 	
 			<div class="input-group">
-				<label>대표 이미지</label>
+				<label>제품 이미지 (변경 시에만 새로 업로드)</label>
 				<div class="image-upload-box" id="dropZone">
 					<input type="file" id="imageInput" accept="image/*" hidden>
-					<div class="upload-placeholder" id="uploadPlaceholder">
-						<span class="icon">📸</span>
-						<p>클릭하거나 이미지를 드래그하여 업로드하세요.</p>
-						<p class="info">파일은 자동으로 최적화(리사이징)됩니다.</p>
-					</div>
-					<div id="imagePreview" class="preview-container hide">
+					
+					<div id="imagePreview" class="preview-container">
 						<img src="" alt="미리보기" id="previewImg">
-						<button type="button" class="remove-btn" id="removeImg">삭제</button>
+						<p class="change-info">이미지를 클릭하여 변경할 수 있습니다.</p>
 					</div>
 				</div>
 			</div>
@@ -139,7 +135,7 @@
 	
 			<div class="form-actions">
 				<button type="button" class="btn-cancel" onclick="history.back()">취소</button>
-				<button type="submit" class="btn-submit" id="submitBtn">제품 등록하기</button>
+				<button type="submit" class="btn-submit" id="submitBtn">수정 완료</button>
 			</div>
 		</form>
 	</div>
@@ -147,23 +143,55 @@
     </section>
 
     <script>
-	// 1. Quill 에디터 설정
+	// 1. 초기 설정 (Quill)
 const quill = new Quill('#editor', {
     theme: 'snow',
     modules: {
-        toolbar: [
-            ['bold', 'italic', 'underline'],
-            [{ 'header': [1, 2, 3, false] }],
-            ['link', 'image'],
-            [{ 'color': [] }, { 'background': [] }],
-            ['clean']
-        ]
+        toolbar: [['bold', 'italic', 'underline'], [{'header': [1, 2, false]}], ['link', 'image'], ['clean']]
     }
 });
 
 let compressedImageBlob = null;
+let currentImageUrl = ""; // 기존 이미지 URL 보관용
 
-// 2. 이미지 리사이징 함수
+// URL에서 제품 ID 가져오기
+const urlParams = new URLSearchParams(window.location.search);
+const productId = urlParams.get('id');
+
+if (!productId) {
+    alert("잘못된 접근입니다.");
+    location.href = 'products.html';
+}
+
+// 2. 데이터 불러오기 함수
+async function fetchProductData() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('products')
+            .select('*')
+            .eq('id', productId)
+            .single();
+
+        if (error) throw error;
+
+        // 폼에 데이터 채우기
+        document.getElementById('category').value = data.category;
+        document.getElementById('title').value = data.title;
+        document.getElementById('url').value = data.url;
+        quill.root.innerHTML = data.content;
+        
+        // 이미지 미리보기 세팅
+        if (data.image_url) {
+            currentImageUrl = data.image_url;
+            document.getElementById('previewImg').src = data.image_url;
+        }
+    } catch (err) {
+        console.error(err);
+        alert("데이터를 불러오는데 실패했습니다.");
+    }
+}
+
+// 3. 이미지 리사이징 (등록 페이지와 동일 로직)
 async function resizeImage(file) {
     return new Promise((resolve) => {
         const reader = new FileReader();
@@ -175,7 +203,7 @@ async function resizeImage(file) {
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
-                const maxWidth = 1200; // 최대 가로폭 설정
+                const maxWidth = 1200;
 
                 if (width > maxWidth) {
                     height = (maxWidth / width) * height;
@@ -187,56 +215,39 @@ async function resizeImage(file) {
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
 
-                // jpeg로 압축 (화질 0.75)
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, 'image/jpeg', 0.75);
+                canvas.toBlob((blob) => resolve(blob), 'image/jpeg', 0.75);
             };
         };
     });
 }
 
-// 3. UI 핸들링 (이미지 선택 및 미리보기)
-const dropZone = document.getElementById('dropZone');
+// 4. 이미지 선택 이벤트
 const imageInput = document.getElementById('imageInput');
 const previewImg = document.getElementById('previewImg');
-const uploadPlaceholder = document.getElementById('uploadPlaceholder');
-const imagePreview = document.getElementById('imagePreview');
 
-dropZone.onclick = () => imageInput.click();
+document.getElementById('dropZone').onclick = () => imageInput.click();
 
 imageInput.onchange = async (e) => {
     const file = e.target.files[0];
     if (file) {
         compressedImageBlob = await resizeImage(file);
-        const previewUrl = URL.createObjectURL(compressedImageBlob);
-        previewImg.src = previewUrl;
-        uploadPlaceholder.classList.add('hide');
-        imagePreview.classList.remove('hide');
+        previewImg.src = URL.createObjectURL(compressedImageBlob);
     }
 };
 
-document.getElementById('removeImg').onclick = (e) => {
-    e.stopPropagation();
-    compressedImageBlob = null;
-    imageInput.value = "";
-    uploadPlaceholder.classList.remove('hide');
-    imagePreview.classList.add('hide');
-};
-
-// 4. 데이터 제출 (Supabase)
-document.getElementById('productForm').onsubmit = async (e) => {
+// 5. 수정 데이터 제출 (Update)
+document.getElementById('editForm').onsubmit = async (e) => {
     e.preventDefault();
     const submitBtn = document.getElementById('submitBtn');
-    submitBtn.innerText = "업로드 중...";
+    submitBtn.innerText = "업데이트 중...";
     submitBtn.disabled = true;
 
     try {
-        let imageUrl = "";
+        let finalImageUrl = currentImageUrl;
 
-        // 이미지 업로드
+        // 새로운 이미지가 선택된 경우에만 업로드
         if (compressedImageBlob) {
-            const fileName = `prod_${Date.now()}.jpg`;
+            const fileName = `prod_update_${Date.now()}.jpg`;
             const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage
                 .from('products_img')
@@ -249,33 +260,37 @@ document.getElementById('productForm').onsubmit = async (e) => {
                 .from('products_img')
                 .getPublicUrl(fileName);
             
-            imageUrl = publicUrlData.publicUrl;
+            finalImageUrl = publicUrlData.publicUrl;
         }
 
-        // DB Insert
-        const { error: insertError } = await supabaseClient
+        // DB 업데이트
+        const { error: updateError } = await supabaseClient
             .from('products')
-            .insert([{
+            .update({
                 category: document.getElementById('category').value,
                 title: document.getElementById('title').value,
                 url: document.getElementById('url').value,
-                image_url: imageUrl,
+                image_url: finalImageUrl,
                 content: quill.root.innerHTML
-            }]);
+            })
+            .eq('id', productId);
 
-        if (insertError) throw insertError;
+        if (updateError) throw updateError;
 
-        alert('제품이 등록되었습니다.');
+        alert('수정이 완료되었습니다.');
         location.href = 'products.html';
 
     } catch (err) {
         console.error(err);
-        alert('등록 실패: ' + err.message);
+        alert('수정 실패: ' + err.message);
     } finally {
-        submitBtn.innerText = "제품 등록하기";
+        submitBtn.innerText = "수정 완료";
         submitBtn.disabled = false;
     }
 };
+
+// 페이지 로드 시 데이터 호출
+window.addEventListener('DOMContentLoaded', fetchProductData);
     </script>	    
 </div>
 <footer class="site-footer">

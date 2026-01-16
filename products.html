@@ -48,6 +48,8 @@
 		
 		<div class="partner-logo">
 			<img src="img/min_logo.png" alt="Mindray">
+			<a href="http://pf.kakao.com/_pdvjn/chat" target="_blank"><img src="img/kakao.png" alt="kakao"></a>
+			<a href="https://blog.naver.com/jcmedical0826" target="_blank"><img src="img/blog.png" alt="naver blog"></a>
 		</div>
         
         <div class="hamburger">☰</div>
@@ -86,77 +88,87 @@
 
 <div class="content-wrapper">
     <section>
-        <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">
-            <p>총 <span id="product-count" style="color:var(--point); font-weight:700;">0</span>개의 제품이 있습니다.</p>
-            <a href="product_write.html" id="admin-write-btn" class="btn btn-point admin-only hide">제품 등록</a>
-			<button id="addProductBtn" data-admin-only class="btn-primary">
-    신규 제품 등록
-  </button>
+        <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">            
+            <a href="product_write.html" id="admin-write-btn" class="btn btn-point" data-admin-only>제품 등록</a>
         </div>
 
 <div class="product-section">
     <!-- JS로 렌더링될 영역 -->
-    <div id="productList" class="product-grid">
-        <!-- 예시 카드 1 -->
-        <div class="product-card">
-            <div class="thumb">
-                <img src="img/product1.jpg" alt="초음파 진단기">
-            </div>
-            <div class="info">
-                <span class="category">Ultrasound</span>
-                <h4>Mindray DC-80 Insight</h4>
-                <p class="desc">혁신적인 X-Insight 기술이 적용된 프리미엄 초음파 시스템입니다.</p>
-                <div class="more-btn">상세보기</div>
-            </div>
-        </div>
-
-        <!-- 예시 카드 2 -->
-        <div class="product-card">
-            <div class="thumb">
-                <img src="img/product2.jpg" alt="환자 감시 모니터">
-            </div>
-            <div class="info">
-                <span class="category">Patient Monitor</span>
-                <h4>BeneVision N Series</h4>
-                <p class="desc">정밀한 모니터링과 직관적인 UI를 제공하는 환자 감시 솔루션입니다.</p>
-                <div class="more-btn">상세보기</div>
-            </div>
-        </div>
-        
+    <div id="productList" class="product-grid">        
         <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
     </div>
 </div>
     </section>
-
+<style>
+[data-admin-only] {
+  display: none;
+}
+</style>
     <script>
-        async function loadProducts() {
+        async function loadProducts() { 
+			const params = new URLSearchParams(window.location.search);
+			const categoryParam = params.get('cat');
+			const categoryMap = {ultrasound: '초음파기기', used: '중고 장비', freq: '고주파기기'};
+			
+			  let query = supabaseClient
+    .from('products')
+    .select('*', { count: 'exact' })
+    .order('created_at', { ascending: false });
+  if (categoryParam) {
+    query = query.eq('category', categoryParam);
+  }
 
-            const { data, error, count } = await supabaseClient
-                .from('products')
-                .select('*', { count: 'exact' });
+  const { data, error } = await query;
+  
+					
 			if (error) {
-      console.error('데이터 로드 실패:', error.message);
-      return;
-    }
-	
-            document.getElementById('product-count').innerText = count;
+				console.error('데이터 로드 실패:', error.message);
+				return;
+			}	
+
             const grid = document.getElementById('productList');
-			const countElement = document.getElementById('product-count');
+			if (!grid) return;
             if (grid) {
-            grid.innerHTML = data.map(p => `
-                <div class="card product-card" onclick="location.href='product_view.html?id=${p.id}'" style="cursor:pointer;">
-                    <div class="thumb" style="height:250px; background:url('${p.image_url || 'img/no-image.png'}') no-repeat center/cover; border-radius:8px 8px 0 0;"></div>
-                    <div class="info" style="padding:20px;">
-                        <h4 style="font-size:18px; margin-bottom:10px;">${p.title}</h4>
-                    </div>
-                </div>
-            `).join('');
-			}else {
-        console.error("ID가 'product-grid'인 요소를 찾을 수 없습니다.");
-    }
+				grid.innerHTML = data.map(p =>{
+					const categoryLabel = categoryMap[p.category] ?? p.category;
+					const linkUrl = p.url && p.url.trim() !== '' ? p.url : `product_view.html?id=${p.id}`;
+				return `
+					<div class="product-card" onclick="window.open('${linkUrl}', '_blank')">
+						<div class="thumb"><img src="${p.image_url}"></div>
+						<div class="info">
+							<div class="card-header">
+								<span class="category">${categoryLabel}</span>
+								<div class="actions" data-admin-only>
+									<button class="edit-btn" onclick="event.stopPropagation(); openEdit('${p.id}')">수정</button>
+								</div>
+							</div>
+							<h4>${p.title}</h4>							
+							<div class="more-btn">상세보기</div>
+						</div>
+					</div>
+				`;}).join('');
+				applyAdminOnly(valid);
+			}
+			
+			if (categoryParam && data.length === 0) {
+  grid.innerHTML = `<p style="text-align:center">해당 카테고리의 제품이 없습니다.</p>`;
+  return;
+}
         }
         window.addEventListener('DOMContentLoaded', loadProducts);
-    </script>	    
+		
+		function openEdit(id) {
+			location.href = `product_edit.html?id=${id}`;
+		}
+		
+		function applyAdminOnly(valid) {
+  document.querySelectorAll('[data-admin-only]').forEach(el => {
+    el.style.display = valid ? 'block' : 'none';
+  });
+}
+		
+		
+    </script>	
 </div>
 <footer class="site-footer">
   <div class="footer-inner">
