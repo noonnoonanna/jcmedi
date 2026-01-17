@@ -132,8 +132,9 @@
 				grid.innerHTML = data.map(p =>{
 					const categoryLabel = categoryMap[p.category] ?? p.category;
 					const linkUrl = p.url && p.url.trim() !== '' ? p.url : `product_view.html?id=${p.id}`;
+					const linkTarget = p.url && p.url.trim() !== '' ? '_blank' : '_self';
 				return `
-					<div class="product-card" onclick="window.open('${linkUrl}', '_blank')">
+					<div class="product-card" onclick="window.open('${linkUrl}', '${linkTarget}')">
 						<div class="thumb"><img src="${p.image_url}"></div>
 						<div class="info">
 							<div class="card-header">
@@ -186,9 +187,9 @@
       </p>
 	  
 	  <div class="footer-links">
-      <a href="terms.html">이용약관</a>
+      <a href="policy.html?tab=terms">이용약관</a>
       <span class="divider">|</span>
-      <a href="privacy.html">개인정보처리방침</a>
+      <a href="policy.html?tab=privacy">개인정보처리방침</a>
     </div>
     </div>
 

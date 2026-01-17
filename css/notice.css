@@ -1,0 +1,103 @@
+/* 공지사항 전용 스타일 */
+.notice-table {
+    width: 100%;
+    border-top: 2px solid #2C4349;
+    border-collapse: collapse;
+}
+
+.notice-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+    border-bottom: 1px solid #eee;
+    transition: background 0.2s;
+    cursor: pointer;
+}
+
+.notice-item:hover {
+    background-color: #f9fbfc;
+}
+
+.notice-item .no {
+    width: 60px;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+}
+
+.notice-item .content-group {
+    flex: 1;
+    padding: 0 20px;
+}
+
+.notice-item .cat {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 12px;
+    background: #EEF2F5;
+    color: #2C4349;
+    border-radius: 3px;
+    margin-bottom: 5px;
+}
+
+.notice-item .title {
+    font-size: 17px;
+    font-weight: 500;
+    color: #333;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.notice-item .date {
+    font-size: 14px;
+    color: #bbb;
+}
+
+/* 이미지 썸네일이 있을 경우 */
+.notice-item .thumb {
+    width: 100px;
+    height: 70px;
+    overflow: hidden;
+    border-radius: 5px;
+    margin-left: 20px;
+}
+
+.notice-item .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .notice-item { padding: 15px 5px; }
+    .notice-item .no { display: none; }
+    .notice-item .content-group { padding: 0 10px; }
+    .notice-item .title { font-size: 15px; }
+    .notice-item .thumb { width: 80px; height: 60px; }
+}
+
+/* CSS 파일에 추가하거나 <style> 태그 안에 넣으세요 */
+#admin-write-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #4f46e5; /* 세련된 인디고 블루 */
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px; /* 부드러운 곡선 */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: none;
+    cursor: pointer;
+}
+
+#admin-write-btn:hover {
+    background-color: #4338ca;
+    transform: translateY(-2px); /* 살짝 위로 이동 */
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+#admin-write-btn:active {
+    transform: translateY(0); /* 클릭 시 다시 내려옴 */
+}

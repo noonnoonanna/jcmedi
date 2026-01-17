@@ -15,6 +15,24 @@
   <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
   <script src="js/app.js" defer></script>
 </head>
+  <style>
+    .view-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .view-header { border-bottom: 2px solid #2C4349; padding-bottom: 20px; margin-bottom: 30px; }
+    .view-header .cat { color: #C5A36A; font-weight: 700; font-size: 14px; display: block; margin-bottom: 10px; }
+    .view-header h2 { font-size: 28px; color: #1e293b; line-height: 1.4; margin-bottom: 15px; }
+    .view-header .info { font-size: 14px; color: #94a3b8; }
+    
+    .view-content { min-height: 300px; line-height: 1.8; font-size: 16px; color: #333; }
+    /* Quill 이미지 중앙 정렬 및 반응형 */
+    .view-content img { max-width: 100%; height: auto; display: block; margin: 20px auto; }
+
+    .view-footer { margin-top: 60px; border-top: 1px solid #eee; padding-top: 30px; display: flex; justify-content: center; gap: 15px; }
+    .btn-list { padding: 12px 30px; background: #2C4349; color: #fff; border-radius: 4px; font-weight: 600; }
+    
+    @media (max-width: 768px) {
+        .view-header h2 { font-size: 22px; }
+    }
+  </style>
 <body>
 <header>
     <div class="header-inner">
@@ -88,71 +106,28 @@
     </div>
 </section>
 
-<div class="content-wrapper">
-    <section>
-        <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">            
-            <a href="notice_write.html" id="admin-write-btn" class="btn btn-point" data-admin-only>등록</a>
-        </div>
-
-<div class="notice-section">
-    <!-- JS로 렌더링될 영역 -->
-    <div id="noticeList" class="notice-grid">        
-        <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
-    </div>
-</div>
-    </section>
-<style>
-[data-admin-only] {
-  display: none;
-}
-</style>
-    <script>
-        async function loadNotice() {
-    let { data, error } = await supabaseClient
-        .from('notices')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-    if (error) {
-        console.error('데이터 로드 실패:', error.message);
-        return;
-    }
-
-    const grid = document.getElementById('noticeList');
-    if (!grid) return;
-
-    if (data.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; padding:50px 0;">등록된 공지사항이 없습니다.</p>`;
-        return;
-    }
-
-    grid.innerHTML = data.map((p, index) => {
-        // 이미지 유무 확인 (Quill 에디터 특성상 첫 번째 이미지를 썸네일로 쓰거나 별도 필드 이용)
-        const hasImage = p.image_url ? `<div class="thumb"><img src="${p.image_url}"></div>` : '';
-        const date = new Date(p.created_at).toLocaleDateString();
+    <div class="view-container">
+        <div id="loading" style="text-align:center; padding:50px;">로딩 중...</div>
         
-        return `
-            <div class="notice-item" onclick="location.href='notice_view.html?id=${p.id}'">
-                <div class="no">${data.length - index}</div>
-                <div class="content-group">
-                    <span class="cat">${p.category || '공지'}</span>
-                    <strong class="title">${p.title}</strong>
-                    <span class="date">${date}</span>
+        <article id="noticeDetail" style="display:none;">
+            <div class="view-header">
+                <span class="cat" id="v-category"></span>
+                <h2 id="v-title"></h2>
+                <div class="info">
+                    작성일: <span id="v-date"></span>
                 </div>
-                ${hasImage}
             </div>
-        `;
-    }).join('');
 
-    // 관리자 버튼 표시 (app.js의 로그인 상태 연동)
-    if (typeof applyAdminOnly === 'function') {
-        applyAdminOnly(window.isAdmin); 
-    }
-}
+            <div class="view-content ql-editor" id="v-content">
+                </div>
 
-window.addEventListener('DOMContentLoaded', loadNotice);
-    </script>	
-</div>
+            <div class="view-footer">
+                <a href="notice.html" class="btn-list">목록으로</a>
+                <button id="admin-edit-btn" class="btn-list" style="background:#C5A36A; display:none;" data-admin-only>수정하기</button>
+            </div>
+        </article>
+    </div>
+
 <footer class="site-footer">
   <div class="footer-inner">
 
@@ -181,8 +156,47 @@ window.addEventListener('DOMContentLoaded', loadNotice);
     © 2025 JC Medical. All rights reserved.
   </div>
 </footer>
-<script>
 
-</script>
+    <script>
+        // URL에서 ID 파라미터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const noticeId = urlParams.get('id');
+
+        async function fetchDetail() {
+            if (!noticeId) {
+                alert('잘못된 접근입니다.');
+                location.href = 'notice.html';
+                return;
+            }
+
+            const { data, error } = await supabaseClient
+                .from('notice')
+                .select('*')
+                .eq('id', noticeId)
+                .single();
+
+            if (error || !data) {
+                alert('해당 글을 찾을 수 없습니다.');
+                location.href = 'notice.html';
+                return;
+            }
+
+            // 데이터 바인딩
+            document.getElementById('v-title').innerText = data.title;
+            document.getElementById('v-category').innerText = data.category || '공지사항';
+            document.getElementById('v-date').innerText = new Date(data.created_at).toLocaleDateString();
+            document.getElementById('v-content').innerHTML = data.content; // Quill HTML
+
+            // 로딩 숨기고 컨텐츠 보이기
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('noticeDetail').style.display = 'block';
+
+            // 수정 버튼 처리
+            const editBtn = document.getElementById('admin-edit-btn');
+            editBtn.onclick = () => location.href = `notice_write.html?id=${data.id}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchDetail);
+    </script>
 </body>
 </html>
