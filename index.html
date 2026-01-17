@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=8cfbccd03d7ee80ea73496965b3babec"></script>
 </head>
 <body>
@@ -163,138 +164,161 @@
 
 <!-- 제품 슬라이드 -->
 <section class="products">
-  <h2 class="section-title">Products</h2>
+  <div class="container">
+    <h2 class="section-title">Products</h2>
+  </div>
 
-  <div class="swiper productSwiper">
-    <div class="swiper-wrapper" id="productList">
-      <!-- JS에서 swiper-slide로 채워짐 -->
-    </div>
-
-    <!-- 좌우 버튼 (선택) -->
-    <div class="swiper-button-prev product-prev"></div>
-    <div class="swiper-button-next product-next"></div>
+  <div class="showcase">
+    <div class="slider" id="productList"></div>
   </div>
 </section>
 <script>
-  const productList = document.getElementById('productList');
+const products = [
+  { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기' },
+  { img: 'img/pro2_con.jpg', name: 'Consona 시리즈' },
+  { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M' },
+  { img: 'img/pro4_torr.jpg', name: 'TORR RF' },
+  { img: 'img/n6.jpg', name: 'Consona N6' },
+  { img: 'img/n7.jpg', name: 'Consona N7' },
+  { img: 'img/n8.jpg', name: 'Consona N8' },
+  { img: 'img/n9.jpg', name: 'Consona N9' },
+];
 
-  const products = [
-    { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기' },
-    { img: 'img/pro2_con.jpg', name: 'Consona 시리즈' },
-    { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M' },
-	{ img: 'img/pro4_torr.jpg', name: 'TORR RF' },
-  ];
+const slider = document.getElementById('productList');
 
-  products.forEach(p => {
-    const slide = document.createElement('div');
-    slide.className = 'swiper-slide';
-    slide.innerHTML = `
+// 무한 루프를 위해 제품 리스트를 2배로 복제하여 생성
+[...products, ...products].forEach(p => {
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="img-box">
       <img src="${p.img}" alt="${p.name}">
-      <div style="padding:16px;font-weight:500;">${p.name}</div>
-    `;
-    productList.appendChild(slide);
-  });
-</script>
-<script>
-  const productSwiper = new Swiper('.productSwiper', {
-    slidesPerView: 3,
-    spaceBetween: 40,
-    loop: true,
-  
-	autoplay: {
-      delay: 3000,              // 3초마다 슬라이드
-      disableOnInteraction: false, // 버튼 눌러도 자동 계속
-      pauseOnMouseEnter: true,  // 마우스 올리면 멈춤 (선택)
-    },
-	
-    navigation: {
-      nextEl: '.product-next',
-      prevEl: '.product-prev',
-    },
+    </div>
+    <div class="info">
+      <div class="name">${p.name}</div>
+    </div>
+  `;
+  slider.appendChild(div);
+});
 
-    breakpoints: {
-      0: {
-        slidesPerView: 1.2,
-		spaceBetween: 15,
-        centeredSlides: true,
-      },
-      768: {
-        slidesPerView: 2,
-      },
-      1024: {
-        slidesPerView: 3,
-      },
-    },
-  });
-</script>
+let x = 0;
+let speed = 0.6; // 속도 약간 상향
+let sliderWidth = slider.scrollWidth / 2;
+let isPaused = false;
 
+// 애니메이션 실행 함수
+function animate() {
+  if (!isPaused) {
+    x -= speed;
+    if (Math.abs(x) >= sliderWidth) {
+      x = 0;
+    }
+    slider.style.transform = `translateX(${x}px)`;
+  }
+  requestAnimationFrame(animate);
+}
+
+// 마우스 오버 시 일시 정지 (사용자가 자세히 볼 수 있도록)
+slider.addEventListener('mouseenter', () => isPaused = true);
+slider.addEventListener('mouseleave', () => isPaused = false);
+
+// 터치 대응 (모바일)
+slider.addEventListener('touchstart', () => isPaused = true);
+slider.addEventListener('touchend', () => isPaused = false);
+
+animate();
+</script>
 <style>
-/* Swiper */
-.productSwiper {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 16px;
+:root {
+  --primary-color: #2c3e50;
+  --bg-color: #F6F8F9;
+  --card-bg: #ffffff;
+  --text-color: #333;
 }
 
-/* 각 슬라이드 */
-.productSwiper .swiper-slide {
-  background: white;
-  border-radius: 12px;
+.products {
+  padding: 100px 0;
+  background: var(--bg-color);
+  font-family: 'Noto Sans KR', sans-serif;
   overflow: hidden;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
 }
 
-/* 이미지 */
-.productSwiper .swiper-slide img {
+.container {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.showcase {
   width: 100%;
-  aspect-ratio: 3 / 4;   /* 이미지 비율 고정 */
-  object-fit: cover;
+  position: relative;
+  cursor: grab;
 }
 
-.productSwiper .swiper-button-next,
-.productSwiper .swiper-button-prev {
-  color: white;
-  width: 48px;
-  height: 48px;
-  background: rgba(0, 0, 0, 0.35);
-  border-radius: 50%;
-  top: 50%;
-  transform: translateY(-50%);
+.slider {
+  display: flex;
+  width: max-content;
+  will-change: transform; /* 성능 최적화 */
 }
 
-/* 아이콘 크기 */
-.productSwiper .swiper-button-next::after,
-.productSwiper .swiper-button-prev::after {
-  font-size: 18px;
-  font-weight: bold;
+.slider .item {
+  width: 300px; /* 기본 너비 */
+  margin-right: 30px;
+  background: var(--card-bg);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
 }
 
-/* 좌우 위치 */
-.productSwiper .swiper-button-prev {
-  left: 24px;
+.slider .item:hover {
+  transform: translateY(-10px); /* 위로 살짝 올라감 */
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
 }
 
-.productSwiper .swiper-button-next {
-  right: 24px;
+/* 이미지 영역 (세로 비율 유지) */
+.slider .item .img-box {
+  width: 100%;
+  aspect-ratio: 3 / 4; /* 세로가 긴 3:4 비율 설정 */
+  overflow: hidden;
+  background: #fff;
 }
 
-/* hover 시 세련되게 */
-.productSwiper .swiper-button-next:hover,
-.productSwiper .swiper-button-prev:hover {
-  background: rgba(0, 0, 0, 0.55);
+.slider img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  transition: transform 0.5s ease;
 }
 
-@media (max-width: 768px) {  
-  .productSwiper .swiper-button-next,
-  .productSwiper .swiper-button-prev {
-    width: 40px;
-    height: 40px;
+.slider .item:hover img {
+  transform: scale(1.05); /* 호버 시 미세하게 확대 */
+}
+
+.info {
+  padding: 24px;
+  text-align: center;
+}
+
+.info .name {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-color);
+  word-break: keep-all;
+}
+
+@media (max-width: 768px) {
+  .products { padding: 60px 0; }
+  .section-title { font-size: 1.8rem; }
+  
+  .slider .item {
+    width: 220px; /* 모바일에서 카드 너비 축소 */
+    margin-right: 20px;
   }
-
-  .productSwiper .swiper-button-next::after,
-  .productSwiper .swiper-button-prev::after {
-    font-size: 14px;
-  }
+  
+  .info { padding: 16px; }
+  .info .name { font-size: 0.95rem; }
 }
 </style>
 
@@ -365,7 +389,7 @@
 </footer>
 <script>
 window.onload = function() {
-    // 1. HTML의 id와 일치하도록 'kakaomap'으로 수정
+    // 1. 지도 설정
     var mapContainer = document.getElementById('kakaomap'), 
         mapOption = { 
             center: new kakao.maps.LatLng(37.46718, 127.1371), 
@@ -373,31 +397,32 @@ window.onload = function() {
         };
 
     var map = new kakao.maps.Map(mapContainer, mapOption); 
-
     var markerPosition = new kakao.maps.LatLng(37.46718, 127.1371); 
 
-    // 2. 마커 생성
-    var marker = new kakao.maps.Marker({
-        position: markerPosition
+    // 2. [고급화] 커스텀 오버레이 HTML 정의 (마커 + 회사명 레이블)
+    var content = `
+        <div class="premium-marker-wrapper">
+            <div class="marker-label">제이씨메디칼</div>
+            <div class="custom-marker">
+                <div class="marker-pulse"></div>
+                <div class="marker-body"></div>
+            </div>
+        </div>
+    `;
+
+    // 3. 커스텀 오버레이 생성 및 지도에 표시
+    var customOverlay = new kakao.maps.CustomOverlay({
+        position: markerPosition,
+        content: content,
+        xAnchor: 0.5, // 가로 중앙
+        yAnchor: 1.0  // 하단 끝을 좌표에 맞춤
     });
 
-    marker.setMap(map);
-
-    // 3. [추가] 마커 위에 회사명 표시 (고급스러운 정보창)
-    var iwContent = '<div style="padding:8px 15px; font-size:13px; font-weight:700; color:#2C4349; border-radius:4px; text-align:center;">제이씨메디칼</div>',
-        iwPosition = markerPosition;
-
-    var infowindow = new kakao.maps.InfoWindow({
-        position : iwPosition, 
-        content : iwContent 
-    });
-      
-    infowindow.open(map, marker); 
+    customOverlay.setMap(map);
 
     // 4. 지도 중심 유지 (반응형)
     window.addEventListener('resize', function() {
-        var relayout = new kakao.maps.LatLng(37.46718, 127.1371);
-        map.setCenter(relayout);
+        map.setCenter(markerPosition);
     });
 };
 </script>
