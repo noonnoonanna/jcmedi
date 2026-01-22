@@ -202,7 +202,7 @@
     const formData = new FormData(form);
 
 	try {
-		const response = await fetch("/.netlify/functions/sendMail", {
+		const response = await fetch("/netlify/functions/sendMail", {
 			method: "POST",
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
 			body: new URLSearchParams(formData).toString(),
@@ -271,4 +271,5 @@ document.querySelector(".close-success").addEventListener("click", () => {
 </script>
 
 </body>
+
 </html>
