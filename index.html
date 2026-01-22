@@ -162,16 +162,19 @@
 }
 </style>
 
-<!-- 제품 슬라이드 -->
 <section class="products">
   <div class="container">
     <h2 class="section-title">Products</h2>
   </div>
 
   <div class="showcase">
-    <div class="slider" id="productList"></div>
+    <div class="slider-wrapper">
+      <div class="slider" id="productList"></div>
+      <div class="slider" id="productListClone"></div>
+    </div>
   </div>
 </section>
+
 <script>
 const products = [
   { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기' },
@@ -185,55 +188,37 @@ const products = [
 ];
 
 const slider = document.getElementById('productList');
+const clone = document.getElementById('productListClone');
 
-// 무한 루프를 위해 제품 리스트를 2배로 복제하여 생성
-[...products, ...products].forEach(p => {
-  const div = document.createElement('div');
-  div.className = 'item';
-  div.innerHTML = `
-    <div class="img-box">
-      <img src="${p.img}" alt="${p.name}">
-    </div>
-    <div class="info">
-      <div class="name">${p.name}</div>
-    </div>
-  `;
-  slider.appendChild(div);
-});
-
-let x = 0;
-let speed = 0.6; // 속도 약간 상향
-let sliderWidth = slider.scrollWidth / 2;
-let isPaused = false;
-
-// 애니메이션 실행 함수
-function animate() {
-  if (!isPaused) {
-    x -= speed;
-    if (Math.abs(x) >= sliderWidth) {
-      x = 0;
-    }
-    slider.style.transform = `translateX(${x}px)`;
-  }
-  requestAnimationFrame(animate);
+// 제품 아이템을 생성하는 함수
+function createItems(target) {
+  products.forEach(p => {
+    const div = document.createElement('div');
+    div.className = 'item';
+    div.innerHTML = `
+      <div class="img-box">
+        <img src="${p.img}" alt="${p.name}">
+      </div>
+      <div class="info">
+        <div class="name">${p.name}</div>
+      </div>
+    `;
+    target.appendChild(div);
+  });
 }
 
-// 마우스 오버 시 일시 정지 (사용자가 자세히 볼 수 있도록)
-slider.addEventListener('mouseenter', () => isPaused = true);
-slider.addEventListener('mouseleave', () => isPaused = false);
-
-// 터치 대응 (모바일)
-slider.addEventListener('touchstart', () => isPaused = true);
-slider.addEventListener('touchend', () => isPaused = false);
-
-animate();
+// 원본과 복제본에 각각 아이템 추가
+createItems(slider);
+createItems(clone);
 </script>
+
 <style>
 :root {
   --primary-color: #2c3e50;
   --bg-color: #F6F8F9;
   --card-bg: #ffffff;
   --text-color: #333;
+  --ani-speed: 170s; /* 슬라이드 속도 조절 (숫자가 커질수록 느려짐) */
 }
 
 .products {
@@ -250,36 +235,44 @@ animate();
 
 .showcase {
   width: 100%;
-  position: relative;
-  cursor: grab;
+  overflow: hidden;
+}
+
+/* 슬라이더 두 개를 감싸는 컨테이너 */
+.slider-wrapper {
+  display: flex;
+  width: max-content;
+  animation: scroll var(--ani-speed) linear infinite;
+}
+
+/* 마우스 호버 시 멈춤 */
+.slider-wrapper:hover {
+  animation-play-state: paused;
 }
 
 .slider {
   display: flex;
-  width: max-content;
-  will-change: transform; /* 성능 최적화 */
+  flex-shrink: 0;
 }
 
 .slider .item {
-  width: 300px; /* 기본 너비 */
+  width: 300px;
   margin-right: 30px;
   background: var(--card-bg);
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
   flex-shrink: 0;
 }
 
 .slider .item:hover {
-  transform: translateY(-10px); /* 위로 살짝 올라감 */
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  transform: translateY(-10px);
 }
 
-/* 이미지 영역 (세로 비율 유지) */
 .slider .item .img-box {
   width: 100%;
-  aspect-ratio: 3 / 4; /* 세로가 긴 3:4 비율 설정 */
+  aspect-ratio: 3 / 4;
   overflow: hidden;
   background: #fff;
 }
@@ -288,37 +281,20 @@ animate();
   width: 100%;
   height: 100%;
   object-fit: contain;
-  display: block;
-  transition: transform 0.5s ease;
 }
 
-.slider .item:hover img {
-  transform: scale(1.05); /* 호버 시 미세하게 확대 */
-}
+.info { padding: 24px; text-align: center; }
+.info .name { font-size: 1.1rem; font-weight: 500; color: var(--text-color); }
 
-.info {
-  padding: 24px;
-  text-align: center;
-}
-
-.info .name {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: var(--text-color);
-  word-break: keep-all;
+/* 핵심 애니메이션: 전체 길이의 50%만큼만 이동하고 처음으로 리셋 */
+@keyframes scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 @media (max-width: 768px) {
-  .products { padding: 60px 0; }
-  .section-title { font-size: 1.8rem; }
-  
-  .slider .item {
-    width: 220px; /* 모바일에서 카드 너비 축소 */
-    margin-right: 20px;
-  }
-  
-  .info { padding: 16px; }
-  .info .name { font-size: 0.95rem; }
+  .slider .item { width: 220px; margin-right: 20px; }
+  :root { --ani-speed: 20s; } /* 모바일은 거리가 짧으므로 조금 더 빠르게 */
 }
 </style>
 
