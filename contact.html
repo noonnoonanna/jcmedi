@@ -190,44 +190,39 @@
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
-	
-	if (captchaInput.value.toUpperCase() !== captchaCode) {
-      e.preventDefault();
+    
+    // 보안코드 검증 로직 생략 (기존 유지)
+    if (captchaInput.value.toUpperCase() !== captchaCode) {
       alert("보안코드를 정확히 입력해 주세요.");
-      generateCaptcha();
-      captchaInput.value = "";
       return;
     }
-	
+    
     const formData = new FormData(form);
+    // FormData를 객체로 변환
+    const data = Object.fromEntries(formData.entries());
 
-	try {
-		const response = await fetch("/netlify/functions/sendMail", {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: new URLSearchParams(formData).toString(),
-		});
-	
-		if (response.ok) {
-		// 1. 성공 레이어 표시 (hidden 속성 제거)
-		successPanel.removeAttribute('hidden');
-		
-		// 2. 배경 스크롤 방지
-		document.body.style.overflow = "hidden";
-		
-		// 3. 폼 초기화 및 캡차 재생성
-		form.reset();
-		if (typeof generateCaptcha === "function") generateCaptcha();
-		} else {
-		throw new Error("서버 응답 오류");
-		}
-	
-	} catch (err) {
-		console.error(err);
-		alert("전송 중 오류가 발생했습니다. jcmedi0826@naver.com으로 직접 문의 부탁드립니다.");
-	}
-
-  });
+    try {
+        // 경로 수정: /netlify/functions/sendMail (앞에 점과 슬래시 확인)
+        const response = await fetch("/netlify/functions/sendMail", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+        });
+    
+        if (response.ok) {
+            successPanel.removeAttribute('hidden');
+            document.body.style.overflow = "hidden";
+            form.reset();
+            if (typeof generateCaptcha === "function") generateCaptcha();
+        } else {
+            throw new Error("서버 응답 오류");
+        }
+    
+    } catch (err) {
+        console.error(err);
+        alert("전송 중 오류가 발생했습니다. jcmedi0826@naver.com으로 직접 문의 부탁드립니다.");
+    }
+});
 
 // 닫기 버튼 이벤트
 document.querySelector(".close-success").addEventListener("click", () => {
@@ -271,5 +266,4 @@ document.querySelector(".close-success").addEventListener("click", () => {
 </script>
 
 </body>
-
 </html>
