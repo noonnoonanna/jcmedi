@@ -203,7 +203,7 @@
 
     try {
         // 경로 수정: /netlify/functions/sendMail (앞에 점과 슬래시 확인)
-        const response = await fetch("/netlify/functions/sendMail", {
+        const response = await fetch("/netlify/functions/sendMail.js", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
