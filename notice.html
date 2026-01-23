@@ -131,51 +131,47 @@
   display: none;
 }
 </style>
-    <script>
-        async function loadNotice() {
-    let { data, error } = await supabaseClient
-        .from('notices')
-        .select('*')
-        .order('created_at', { ascending: false });
+<script>
+    async function loadNotice() {
+		let { data, error } = await supabaseClient
+			.from('notices')
+			.select('*')
+			.order('created_at', { ascending: false });
 
-    if (error) {
-        console.error('데이터 로드 실패:', error.message);
-        return;
-    }
+		if (error) {
+			console.error('데이터 로드 실패:', error.message);
+			return;
+		}
 
-    const grid = document.getElementById('noticeList');
-    if (!grid) return;
+		const grid = document.getElementById('noticeList');
+		if (!grid) return;
+		if (data.length === 0) {
+			grid.innerHTML = `<p style="text-align:center; padding:50px 0;">등록된 공지사항이 없습니다.</p>`;
+			return;
+		}
 
-    if (data.length === 0) {
-        grid.innerHTML = `<p style="text-align:center; padding:50px 0;">등록된 공지사항이 없습니다.</p>`;
-        return;
-    }
-
-    grid.innerHTML = data.map((p, index) => {
-        // 이미지 유무 확인 (Quill 에디터 특성상 첫 번째 이미지를 썸네일로 쓰거나 별도 필드 이용)
-        const hasImage = p.image_url ? `<div class="thumb"><img src="${p.image_url}"></div>` : '';
-        const date = new Date(p.created_at).toLocaleDateString();
+		grid.innerHTML = data.map((p, index) => {
+			// 이미지 유무 확인 (Quill 에디터 특성상 첫 번째 이미지를 썸네일로 쓰거나 별도 필드 이용)
+			const hasImage = p.image_url ? `<div class="thumb"><img src="${p.image_url}"></div>` : '';
+			const date = new Date(p.created_at).toLocaleDateString();
         
-        return `
-            <div class="notice-item" onclick="location.href='notice_view.html?id=${p.id}'">
-                <div class="no">${data.length - index}</div>
-                <div class="content-group">
-                    <span class="cat">${p.category || '공지'}</span>
-                    <strong class="title">${p.title}</strong>
-                    <span class="date">${date}</span>
-                </div>
-                ${hasImage}
-            </div>
-        `;
-    }).join('');
+			return `
+				<div class="notice-item" onclick="location.href='notice_view.html?id=${p.id}'">
+					<div class="no">${data.length - index}</div>
+					<div class="content-group">
+						<span class="cat">${p.category || '공지'}</span>
+						<strong class="title">${p.title}</strong>
+						<span class="date">${date}</span>
+					</div>
+					${hasImage}
+				</div>
+			`;
+		}).join('');
+		
+		applyAdminOnly(valid);
+	}
 
-    // 관리자 버튼 표시 (app.js의 로그인 상태 연동)
-    if (typeof applyAdminOnly === 'function') {
-        applyAdminOnly(window.isAdmin); 
-    }
-}
-
-window.addEventListener('DOMContentLoaded', loadNotice);
+	window.addEventListener('DOMContentLoaded', loadNotice);
     </script>	
 </div>
 <footer class="site-footer">

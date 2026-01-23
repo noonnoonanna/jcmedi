@@ -292,6 +292,25 @@ document.getElementById('editForm').onsubmit = async (e) => {
 
         // 새로운 이미지가 선택된 경우에만 업로드
         if (compressedImageBlob) {
+			//기존 이미지 삭제
+			if (currentImageUrl) {
+				const urlParts = currentImageUrl.split('/public/');
+				if (urlParts.length > 1) {
+					const fullPath = urlParts[1];              // products_img/파일명.jpg
+					const bucketName = fullPath.split('/')[0]; // products_img
+					const filePath = fullPath.split('/').slice(1).join('/');
+		
+					const { error: removeError } = await supabaseClient
+						.storage
+						.from(bucketName)
+						.remove([filePath]); // ⭐ 배열
+			
+					if (removeError) {
+						console.warn('기존 이미지 삭제 실패:', removeError.message);
+					}
+				}
+			}
+		
             const fileName = `prod_update_${Date.now()}.jpg`;
             const { data: uploadData, error: uploadError } = await supabaseClient
                 .storage

@@ -167,6 +167,24 @@ window.addEventListener('DOMContentLoaded', () => {
     </section>
 
     <script>
+	// 2. Quill 에디터 설정 및 이미지 핸들러
+    const quill = new Quill('#editor', {
+        theme: 'snow',
+        modules: {
+            toolbar: {
+                container: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['image', 'link'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+                ],
+                handlers: {
+                    image: imageHandler
+                }
+            }
+        }
+    });
+		
 	// 1. 이미지 압축 함수
 async function compressImage(file) {
     return new Promise((resolve) => {
@@ -206,24 +224,6 @@ async function compressImage(file) {
     });
 }
 
-        // 2. Quill 에디터 설정 및 이미지 핸들러
-        const quill = new Quill('#editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: {
-                    container: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline'],
-                        ['image', 'link'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }]
-                    ],
-                    handlers: {
-                        image: imageHandler
-                    }
-                }
-            }
-        });
-
         async function imageHandler() {
             const input = document.createElement('input');
             input.setAttribute('type', 'file');
@@ -242,7 +242,8 @@ async function compressImage(file) {
                 const fileName = `notice/${Date.now()}_${file.name.split('.')[0]}.jpg`;
 
                 // Supabase Storage 업로드
-                const { data, error } = await supabaseClient.storage
+                const { data, error } = await supabaseClient
+				    .storage
                     .from('notice_img')
                     .upload(fileName, compressedBlob, {
                         contentType: 'image/jpeg'
