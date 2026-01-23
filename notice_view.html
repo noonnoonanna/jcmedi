@@ -148,9 +148,97 @@
             <div class="view-footer">
                 <a href="notice.html" class="btn-list">목록으로</a>
                 <button id="admin-edit-btn" class="btn-list" style="background:#C5A36A; display:none;" data-admin-only>수정하기</button>
+				<button id="deleteBtn" class="btn-list" style="background:#e74c3c; display:none;" data-admin-only>삭제</button>
             </div>
         </article>
     </div>
+    <script>
+        // URL에서 ID 파라미터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const noticeId = urlParams.get('id');
+
+        async function fetchDetail() {
+            if (!noticeId) {
+                alert('잘못된 접근입니다.');
+                location.href = 'notice.html';
+                return;
+            }
+
+            const { data, error } = await supabaseClient
+                .from('notices')
+                .select('*')
+                .eq('id', noticeId)
+                .single();
+
+            if (error || !data) {
+                alert('해당 글을 찾을 수 없습니다.');
+                location.href = 'notice.html';
+                return;
+            }
+
+            // 데이터 바인딩
+            document.getElementById('v-title').innerText = data.title;
+            document.getElementById('v-category').innerText = data.category || '공지사항';
+            document.getElementById('v-date').innerText = new Date(data.created_at).toLocaleDateString();
+            document.getElementById('v-content').innerHTML = data.content; // Quill HTML
+
+            // 로딩 숨기고 컨텐츠 보이기
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('noticeDetail').style.display = 'block';
+
+            // 수정 버튼 처리
+            const editBtn = document.getElementById('admin-edit-btn');
+            editBtn.onclick = () => location.href = `notice_edit.html?id=${data.id}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', fetchDetail);
+
+document.getElementById('deleteBtn').addEventListener('click', async () => {
+  if (!confirm('정말 이 공지를 삭제하시겠습니까?')) return;
+
+  try {
+    // 1. 공지 데이터 가져오기
+    const { data, error } = await supabaseClient
+      .from('notices')
+      .select('content')
+      .eq('id', noticeId)
+      .single();
+
+    if (error) throw error;
+
+    // 2. content 안 이미지 URL 추출
+    const doc = new DOMParser().parseFromString(data.content, 'text/html');
+    const images = [...doc.querySelectorAll('img')];
+
+    // 3. Storage 이미지 전부 삭제
+    for (const img of images) {
+      const url = img.src;
+      const path = url.split('/public/notice_img/')[1];
+      if (!path) continue;
+
+      await supabaseClient
+        .storage
+        .from('notice_img')
+        .remove([path]);
+    }
+
+    // 4. DB row 삭제
+    const { error: deleteError } = await supabaseClient
+      .from('notices')
+      .delete()
+      .eq('id', noticeId);
+
+    if (deleteError) throw deleteError;
+
+    alert('공지와 이미지가 모두 삭제되었습니다.');
+    location.href = 'notice.html';
+
+  } catch (err) {
+    console.error(err);
+    alert('삭제 실패: ' + err.message);
+  }
+});
+</script>
 
 <footer class="site-footer">
   <div class="footer-inner">
@@ -180,47 +268,5 @@
     © 2025 JC Medical. All rights reserved.
   </div>
 </footer>
-
-    <script>
-        // URL에서 ID 파라미터 가져오기
-        const urlParams = new URLSearchParams(window.location.search);
-        const noticeId = urlParams.get('id');
-
-        async function fetchDetail() {
-            if (!noticeId) {
-                alert('잘못된 접근입니다.');
-                location.href = 'notice.html';
-                return;
-            }
-
-            const { data, error } = await supabaseClient
-                .from('notice')
-                .select('*')
-                .eq('id', noticeId)
-                .single();
-
-            if (error || !data) {
-                alert('해당 글을 찾을 수 없습니다.');
-                location.href = 'notice.html';
-                return;
-            }
-
-            // 데이터 바인딩
-            document.getElementById('v-title').innerText = data.title;
-            document.getElementById('v-category').innerText = data.category || '공지사항';
-            document.getElementById('v-date').innerText = new Date(data.created_at).toLocaleDateString();
-            document.getElementById('v-content').innerHTML = data.content; // Quill HTML
-
-            // 로딩 숨기고 컨텐츠 보이기
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('noticeDetail').style.display = 'block';
-
-            // 수정 버튼 처리
-            const editBtn = document.getElementById('admin-edit-btn');
-            editBtn.onclick = () => location.href = `notice_write.html?id=${data.id}`;
-        }
-
-        window.addEventListener('DOMContentLoaded', fetchDetail);
-    </script>
 </body>
 </html>

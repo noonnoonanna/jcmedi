@@ -39,6 +39,7 @@
   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
   <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@latest/image-resize.min.js"></script>
 </head>
 <body>
 <script>
@@ -62,7 +63,15 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <style>
-.write-form .form-grid{grid-template-columns:1fr;}
+.ql-editor img {
+  max-width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.ql-editor .ql-image-handle {
+  border: 1px solid #09f;
+}
 </style>
 <header>
     <div class="header-inner">
@@ -139,11 +148,11 @@ window.addEventListener('DOMContentLoaded', () => {
 <div class="content-wrapper">
 	<div class="write-container">
 		<div class="write-header">
-			<h3>공지사항 등록하기</h3>
+			<h3>공지사항 수정하기</h3>
 		</div>
 	
-		<form id="noticeForm" class="write-form">
-			<div class="form-grid">
+		<form id="editForm" class="write-form">
+			<div class="form-grid">				
 				<div class="input-group">
 					<label for="title">제목</label>
 					<input type="text" id="title" placeholder="제목을 입력하세요" required>
@@ -153,160 +162,240 @@ window.addEventListener('DOMContentLoaded', () => {
 			<div class="input-group">
 				<label>내용</label>
 				<div id="editor-container">
-					<div id="editor" style="height: 960px;"></div>
+					<div id="editor" style="height: 300px;"></div>
 				</div>
 			</div>
 	
 			<div class="form-actions">
 				<button type="button" class="btn-cancel" onclick="history.back()">취소</button>
-				<button type="submit" class="btn-submit" id="submitBtn">등록하기</button>
+				<button type="submit" class="btn-submit" id="submitBtn">수정 완료</button>
 			</div>
 		</form>
 	</div>
 </div>
     </section>
 
-    <script>
-    const quill = new Quill('#editor', {
-        theme: 'snow',
-        modules: {
-            toolbar: {
-                container: [
-                    [{ 'header': [1, 2, 3, false] }],
-                    ['bold', 'italic', 'underline'],
-                    ['image', 'link'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-					[{ 'color': [] }, { 'background': [] }]
-                ],
-                handlers: {
-                    image: imageHandler
-                }
-            }
-        }
-    });
-		
-	// 1. 이미지 압축 함수
-async function compressImage(file) {
-    return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = (event) => {
-            const img = new Image();
-            img.src = event.target.result;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                let width = img.width;
-                let height = img.height;
-                const maxWidth = 1200;
-				
-                if (width > maxWidth) {
-                    height = (maxWidth / width) * height;
-                    width = maxWidth;
-                }
+<script>
+/* =================================================
+   0. URL 파라미터에서 notice id 가져오기
+================================================= */
+const params = new URLSearchParams(window.location.search);
+const noticeId = params.get('id');
 
-                canvas.width = width;
-                canvas.height = height;
-                const ctx = canvas.getContext('2d');
-                // --- 추가된 부분: 배경을 흰색으로 채우기 (PNG 투명도 방지) ---
-                ctx.fillStyle = "#fff"; 
-                ctx.fillRect(0, 0, width, height);
-                // -------------------------------------------------------
-
-                ctx.drawImage(img, 0, 0, width, height);
-
-                // 'image/jpeg'로 설정했으므로 여기서 JPG 변환이 일어납니다.
-                canvas.toBlob((blob) => {
-                    resolve(blob);
-                }, 'image/jpeg', 0.7); 
-            };
-        };
-    });
+if (!noticeId) {
+  alert('잘못된 접근입니다.');
+  location.href = 'notice.html';
 }
 
-        async function imageHandler() {
-            const input = document.createElement('input');
-            input.setAttribute('type', 'file');
-            input.setAttribute('accept', 'image/*');
-            input.click();
+/* =================================================
+   1. Quill 초기화
+================================================= */
+const quill = new Quill('#editor', {
+  theme: 'snow',
+  modules: {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline'],
+        ['image', 'link'],
+        [{ list: 'ordered' }, { list: 'bullet' }],
+        [{ color: [] }, { background: [] }]
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    }
+  },
+  imageResize: {
+    parchment: Quill.import('parchment'),
+    modules: ['Resize', 'DisplaySize', 'Toolbar']
+  }
+});
 
-            input.onchange = async () => {
-                const file = input.files[0];
-                if (!file) return;
+/* =================================================
+   2. 이미지 압축 함수
+================================================= */
+async function compressImage(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
 
-                // 로딩 표시 (선택사항)
-                console.log('압축 및 업로드 중...');
+    reader.onload = (e) => {
+      const img = new Image();
+      img.src = e.target.result;
 
-                // 압축 실행
-                const compressedBlob = await compressImage(file);
-                const fileName = `notice/${Date.now()}_${file.name.split('.')[0]}.jpg`;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxWidth = 1200;
+        let { width, height } = img;
 
-                // Supabase Storage 업로드
-                const { data, error } = await supabaseClient
-				    .storage
-                    .from('notice_img')
-                    .upload(fileName, compressedBlob, {
-                        contentType: 'image/jpeg'
-                    });
-
-                if (error) {
-                    alert('업로드 실패: ' + error.message);
-                    return;
-                }
-
-                // 이미지 URL 가져와서 에디터에 삽입
-                const { data: { publicUrl } } = supabaseClient.storage
-                    .from('notice_img')
-                    .getPublicUrl(fileName);
-
-                const range = quill.getSelection();
-                quill.insertEmbed(range.index, 'image', publicUrl);
-            };
+        if (width > maxWidth) {
+          height = height * (maxWidth / width);
+          width = maxWidth;
         }
 
-        // 3. 게시글 저장 함수
-document.getElementById('noticeForm').onsubmit = async (e) => {
-    e.preventDefault();
-    const submitBtn = document.getElementById('submitBtn');
-    submitBtn.innerText = "업로드 중...";
-    submitBtn.disabled = true;
-	
-	try {
-            const title = document.getElementById('title').value;
-            const content = quill.root.innerHTML; // HTML 통째로 저장
+        canvas.width = width;
+        canvas.height = height;
 
-            if (!title || content === '<p><br></p>') {
-                alert('제목과 내용을 입력해주세요.');
-                return;
-            }
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff'; // PNG 투명도 제거
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
 
-            // 첫 번째 이미지를 대표 이미지로 추출 (썸네일 용도)
-            const imgTag = quill.root.querySelector('img');
-            const thumbnailUrl = imgTag ? imgTag.getAttribute('src') : null;
+        canvas.toBlob(
+          (blob) => resolve(blob),
+          'image/jpeg',
+          0.7
+        );
+      };
+    };
+  });
+}
 
-            const { error } = await supabaseClient
-                .from('notices')
-                .insert([{ 
-                    title, 
-                    content, 
-                    image_url: thumbnailUrl, // 리스트에서 보여줄 썸네일
-                    created_at: new Date() 
-                }]);
+/* =================================================
+   3. Quill 이미지 업로드 핸들러
+================================================= */
+async function imageHandler() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.click();
 
-            if (error) {
-                alert('저장 실패: ' + error.message);
-            } else {
-                alert('등록되었습니다.');
-                location.href = 'notice.html';
-            }
-        } catch (err) {
-			console.error(err);
-			alert('등록 실패: ' + err.message);
-		} finally {
-			submitBtn.innerText = "등록하기";
-			submitBtn.disabled = false;
-		}
-	};
-    </script>	    
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (!file) return;
+
+    try {
+      const compressed = await compressImage(file);
+      const fileName = `${Date.now()}_${crypto.randomUUID()}.jpg`;
+
+      const { error } = await supabaseClient
+        .storage
+        .from('notice_img')
+        .upload(fileName, compressed, {
+          contentType: 'image/jpeg'
+        });
+
+      if (error) throw error;
+
+      const { data } = supabaseClient
+        .storage
+        .from('notice_img')
+        .getPublicUrl(fileName);
+
+      const range = quill.getSelection();
+      quill.insertEmbed(range.index, 'image', data.publicUrl);
+
+    } catch (err) {
+      console.error(err);
+      alert('이미지 업로드 실패');
+    }
+  };
+}
+
+/* =================================================
+   4. 이미지 URL 추출 함수
+================================================= */
+function extractImageUrls(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  return [...doc.querySelectorAll('img')].map(img => img.src);
+}
+
+/* =================================================
+   5. 기존 공지 데이터 불러오기
+================================================= */
+let originalContent = '';
+
+async function fetchProductData() {
+  try {
+    const { data, error } = await supabaseClient
+      .from('notices')
+      .select('*')
+      .eq('id', noticeId)
+      .single();
+
+    if (error) throw error;
+
+    document.getElementById('title').value = data.title;
+    quill.root.innerHTML = data.content;
+
+    // 🔥 수정 전 content 저장 (이미지 비교용)
+    originalContent = data.content;
+
+  } catch (err) {
+    console.error(err);
+    alert('데이터를 불러오지 못했습니다.');
+    location.href = 'notice.html';
+  }
+}
+
+/* =================================================
+   6. 수정 저장 처리
+================================================= */
+document.getElementById('editForm').onsubmit = async (e) => {
+  e.preventDefault();
+
+  const submitBtn = document.getElementById('submitBtn');
+  submitBtn.innerText = '수정 중...';
+  submitBtn.disabled = true;
+
+  try {
+    const title = document.getElementById('title').value.trim();
+    const updatedContent = quill.root.innerHTML;
+
+    if (!title || updatedContent === '<p><br></p>') {
+      alert('제목과 내용을 입력하세요.');
+      return;
+    }
+
+    // 이미지 비교
+    const beforeImages = extractImageUrls(originalContent);
+    const afterImages = extractImageUrls(updatedContent);
+
+    const removedImages = beforeImages.filter(
+      url => !afterImages.includes(url)
+    );
+
+    // ❌ 삭제된 이미지 storage에서 제거
+    for (const url of removedImages) {
+      const path = url.split('/public/notice_img/')[1];
+      if (!path) continue;
+
+      await supabaseClient
+        .storage
+        .from('notice_img')
+        .remove([path]);
+    }
+
+    // DB 업데이트
+    const { error } = await supabaseClient
+      .from('notices')
+      .update({
+        title,
+        content: updatedContent
+      })
+      .eq('id', noticeId);
+
+    if (error) throw error;
+
+    alert('수정이 완료되었습니다.');
+    location.href = 'notice.html';
+
+  } catch (err) {
+    console.error(err);
+    alert('수정 실패: ' + err.message);
+  } finally {
+    submitBtn.innerText = '수정 완료';
+    submitBtn.disabled = false;
+  }
+};
+
+/* =================================================
+   7. 페이지 로드시 데이터 호출
+================================================= */
+window.addEventListener('DOMContentLoaded', fetchProductData);
+</script>
+	    
 </div>
 <footer class="site-footer">
   <div class="footer-inner">
