@@ -166,6 +166,7 @@
 								<span class="category">${categoryLabel}</span>
 								<div class="actions" data-admin-only>
 									<button class="edit-btn" onclick="event.stopPropagation(); openEdit('${p.id}')">수정</button>
+									<button class="delete-btn" onclick="event.stopPropagation(); deleteProduct('${p.id}')">삭제</button>
 								</div>
 							</div>
 							<h4>${p.title}</h4>							
@@ -186,6 +187,29 @@
 		function openEdit(id) {
 			location.href = `product_edit.html?id=${id}`;
 		}
+		
+		// 제품 삭제 함수
+async function deleteProduct(id) {
+    if (!confirm('정말 삭제하시겠습니까? 삭제된 데이터는 복구할 수 없습니다.')) {
+        return;
+    }
+
+    try {
+        const { error } = await supabaseClient
+            .from('products')
+            .delete()
+            .eq('id', id);
+
+        if (error) throw error;
+
+        alert('삭제되었습니다.');
+        // 페이지를 새로고침하지 않고 리스트만 다시 불러옵니다.
+        loadProducts(); 
+    } catch (error) {
+        console.error('삭제 실패:', error.message);
+        alert('삭제 중 오류가 발생했습니다: ' + error.message);
+    }
+}
 		
 		function applyAdminOnly(valid) {
   document.querySelectorAll('[data-admin-only]').forEach(el => {

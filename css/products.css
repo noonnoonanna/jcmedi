@@ -400,3 +400,30 @@
         padding: 20px;
     }
 }
+
+.delete-btn {
+    background: #e74c3c; /* 빨간색 계열 */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 5px;
+    transition: background 0.2s;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
+}
+
+/* 기존 수정 버튼과 정렬 맞추기 */
+.edit-btn {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+}
