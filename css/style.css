@@ -49,19 +49,32 @@ header {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  gap: 10px;
 }
 
-.partner-logo img {
-  height: 25px;
-  margin-right: 10px;
-  width: auto;
+.vendor-logos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px; 
+}
+
+.vendor-logos img:first-child {
+    height: 28px;
+    width: auto;
+}
+
+.vendor-logos img:last-child {
+    height: 22px;
+    width: auto;
 }
 
 .partner-logo a img {
-  height: 40px;
-  margin-right: 10px;
-  cursor:pointer;
+    height: 40px;
     width: auto;
+    cursor: pointer;
+    display: block;
 }
 
 .nav {
@@ -112,7 +125,7 @@ header:hover .mega-menu {
   grid-column: span 1; 
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 15px;
 }
 
 .mega-col:nth-child(1) { grid-column: 3; }
@@ -124,6 +137,7 @@ header:hover .mega-menu {
   color: #dce5e3;
   font-size: 16px;
   transition: 0.2s;
+  line-height: 25px;
 }
 
 .mega-col a:hover {
@@ -1270,9 +1284,13 @@ header:hover .mega-menu {
   .logo img { height: 35px; }
   .nav, .mega-menu { display: none !important; }
   .hamburger { display: block; }
-  .partner-logo { display: flex; grid-column: 2; justify-content: center; margin-top:2px; margin-left:5px; }
+  .partner-logo { display: flex; grid-column: 2; justify-content: center; margin-top:2px; margin-left:13px; gap:5px; }
   .partner-logo img { height: 17px; width: auto; margin-right: 5px; }
   .partner-logo a img { height: 28px; margin-right: 5px; cursor:pointer; width: auto; }
+
+
+.vendor-logos img:first-child { height: 22px; width: auto;}
+.vendor-logos img:last-child { height: 16px; width: auto;}
 
 .icon-plus, .icon-minus, .mobile-sub {display:block;}
   /* 모바일 메뉴 열렸을 때 */
