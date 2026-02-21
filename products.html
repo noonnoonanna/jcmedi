@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>제이씨메디칼(JCMedical) | 마인드레이·초음파·심전도·의료기기 전문 대리점</title>
-  <meta name="description" content="마인드레이(Mindray) 공식 대리점 제이씨메디칼입니다. 가성비 높은 신품 및 중고 초음파기기, 삼성·알피니언 초음파, 바이오넷 심전도기(Cardio7), 폐활량계, 환자감시모니터, 토르리프팅 고주파기 등 최적의 의료 솔루션을 제공합니다.">
-  <meta name="keywords" content="제이씨메디칼, jc메디칼, jcmedical, 마인드레이, 초음파대리점, 심전도기, 환자감시모니터, 중고초음파">
+  <title>제이씨메디칼(JCMedical) | 오스테오시스 * 마인드레이 전문 대리점</title>
+  <meta name="description" content="제이씨메디칼(JCMedical)">
+  <meta name="keywords" content="제이씨메디칼, jc메디칼, jcmedical, 오스테오시스, 마인드레이, 초음파대리점, 심전도기, 환자감시모니터, 중고초음파">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="제이씨메디칼 - 마인드레이 의료기기 전문">
+  <meta property="og:title" content="제이씨메디칼 - 오스테오시스 * 마인드레이 전문 대리점">
   <meta property="og:description" content="초음파, 심전도, 환자감시모니터 등 의료장비 솔루션의 중심 JCMedical">
   <meta property="og:url" content="https://www.jcmedical.com/">
   <meta property="og:image" content="https://www.jcmedical.com/img/logo.png">
@@ -57,8 +57,10 @@
                 <li class="nav-item">
 					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
 					<ul class="mobile-sub">
-						<li><a href="products.html?cat=ultrasound">초음파진단기</a></li>
-						<li><a href="products.html?cat=freq">고주파기기</a></li>
+						<li><a href="products.html?cat=bmd">골밀도진단기 (BMD)</a></li>
+						<li><a href="products.html?cat=eswt">체외충격파 (ESWT)</a></li>
+						<li><a href="products.html?cat=ultrasound">초음파진단기 (Ultrasound / SONO)</a></li>
+						<li><a href="products.html?cat=freq">고주파기기 (TORR RF)</a></li>
 						<li><a href="products.html?cat=used">중고장비</a></li>
 					</ul>
 				</li>
@@ -72,7 +74,10 @@
         </nav>
 		
 		<div class="partner-logo">
-			<img src="img/min_logo.png" alt="Mindray">
+			<div class="vendor-logos">
+				<img src="img/os_logo.png" alt="Mindray">
+				<img src="img/min_logo.png" alt="Mindray">
+			</div>
 			<a href="http://pf.kakao.com/_pdvjn/chat" target="_blank"><img src="img/kakao.png" alt="kakao"></a>
 			<a href="https://blog.naver.com/jcmedical0826" target="_blank"><img src="img/blog.png" alt="naver blog"></a>
 		</div>
@@ -88,8 +93,10 @@
             </div>
         
             <div class="mega-col">
-                <a href="products.html?cat=ultrasound">초음파진단기</a>
-				<a href="products.html?cat=freq">고주파기기</a>
+				<a href="products.html?cat=bmd">골밀도진단기 (BMD)</a>
+				<a href="products.html?cat=eswt">체외충격파 (ESWT)</a>
+				<a href="products.html?cat=ultrasound">초음파진단기<br>(Ultrasound / SONO)</a>
+				<a href="products.html?cat=freq">고주파기기 (TORR RF)</a>
                 <a href="products.html?cat=used">중고장비</a>
             </div>
         
@@ -118,13 +125,13 @@
         </div>
 
 <div class="product-section">
-    <!-- JS로 렌더링될 영역 -->
+    <div id="loadingIndicator" class="loader-container" style="display:none;">
+		<div class="spinner"></div>
+		<p>Loading...</p>
+	</div>
+	<!-- JS로 렌더링될 영역 -->
     <div id="productList" class="product-grid">        
         <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
-		<div id="loadingIndicator" class="loader-container">
-			<div class="spinner"></div>
-			<p>Loading...</p>
-		</div>
     </div>
 </div>
     </section>
@@ -134,15 +141,172 @@
 }
 </style>
 <script>
-    async function loadProducts() { 
+	const staticProducts = {
+		bmd: `
+			<div class="product-card" onclick="window.open('https://osteosys.com/product/dexxum-t/', '_blank')">
+				<div class="thumb"><img src="img/DT/DT 2.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">골밀도진단기</span>
+					</div>
+					<h4>OsteoSys DEXXUM T</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://osteosys.com/product/dexxum-t-quantum/', '_blank')">
+				<div class="thumb"><img src="img/DTQ/DTQ_2.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">골밀도진단기</span>
+					</div>
+					<h4>OsteoSys DEXXUM T Quantum</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://osteosys.com/product/excellus/', '_blank')">
+				<div class="thumb"><img src="img/EXCELLUS/EXCELLUS 1.png"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">골밀도진단기</span>
+					</div>
+					<h4>OsteoSys EXCELLUS</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://osteosys.com/product/primus/', '_blank')">
+				<div class="thumb"><img src="img/PRIMUS/PRIMUS 1.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">골밀도진단기</span>
+					</div>
+					<h4>OsteoSys TPRIMUS</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+		`,
+		eswt: `
+			<div class="product-card" onclick="window.open('https://osteosys.com/product/npt-sonicure/', '_blank')">
+				<div class="thumb"><img src="img/eswt-bc4377-b.png"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">체외충격파</span>
+					</div>
+					<h4>OsteoSys SoniCure F/R</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+		`,
+		ultrasound: `
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/point-of-care/te-air-e5m', '_blank')">
+				<div class="thumb"><img src="img/pro3_e5m.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray TE Air e5M</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/general-imaging/resona-i9', '_blank')">
+				<div class="thumb"><img src="img/resonai9.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Resona I9</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/women-health/consona-n-series', '_blank')">
+				<div class="thumb"><img src="img/pro2_con.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Consona 시리즈</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/primary-care/consona-n9', '_blank')">
+				<div class="thumb"><img src="img/n9.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Consona N9</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/primary-care/consona-n8', '_blank')">
+				<div class="thumb"><img src="img/n8.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Consona N8</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/primary-care/consona-n7', '_blank')">
+				<div class="thumb"><img src="img/n7.jpg"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Consona N7</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+			<div class="product-card" onclick="window.open('https://www.mindray.com/en/products/ultrasound/primary-care/consona-n6', '_blank')">
+				<div class="thumb"><img src="img/n6.png"></div>
+				<div class="info">
+					<div class="card-header">
+						<span class="category">초음파진단기</span>
+					</div>
+					<h4>Mindray Consona N6</h4>							
+					<div class="more-btn">상세보기</div>
+				</div>
+			</div>
+		`,
+	};
+		
+	async function initPage() {
 		const params = new URLSearchParams(window.location.search);
 		const categoryParam = params.get('cat');
-		const categoryMap = {ultrasound: '초음파기기', used: '중고 장비', freq: '고주파기기'};
+		const grid = document.getElementById('productList');
+		
+		// 0. 초기화: 그리드를 비웁니다.
+		grid.innerHTML = '';
+		
+		if (!categoryParam) {        
+			// 모든 정적 제품들을 먼저 넣습니다.
+			const allStatic = Object.values(staticProducts).join('');
+			grid.innerHTML = allStatic;
 			
+			// 그 다음 중고장비 데이터를 불러와서 뒤에 붙입니다.
+			await loadProducts(true); 
+		} else if (categoryParam === 'used' || categoryParam === 'freq') {
+			const loading = document.getElementById('loadingIndicator');
+			if (loading) loading.style.display = 'block';
+			await loadProducts(false);
+		} else {
+			if (staticProducts[categoryParam]) {
+				grid.innerHTML = staticProducts[categoryParam];
+			} else {
+				grid.innerHTML = `<p style="text-align:center">해당 카테고리의 제품이 없습니다.</p>`;
+			}
+		}
+	}
+
+    async function loadProducts(isAppend = false) { 
+		const params = new URLSearchParams(window.location.search);
+		const categoryParam = params.get('cat');
+		const categoryMap = {bmd: '골밀도진단기', eswt: '체외충격파', ultrasound: '초음파진단기', used: '중고 장비', freq: '고주파기기'};
+
 		let query = supabaseClient
 			.from('products')
 			.select('*', { count: 'exact' })
-			.order('created_at', { ascending: false });
+			.in('category', ['used', 'freq'])
 			
 		if (categoryParam) {
 			query = query.eq('category', categoryParam);
@@ -158,7 +322,7 @@
         const grid = document.getElementById('productList');
 		if (!grid) return;
         if (grid) {
-			grid.innerHTML = data.map(p =>{
+			const usedHtml = data.map(p =>{
 				const categoryLabel = categoryMap[p.category] ?? p.category;
 				const linkUrl = p.url && p.url.trim() !== '' ? p.url : `product_view.html?id=${p.id}`;
 				const linkTarget = p.url && p.url.trim() !== '' ? '_blank' : '_self';
@@ -181,6 +345,16 @@
 				`;}).join('');
 				
 			applyAdminOnly(valid);
+			
+			if (isAppend) {
+				// 기존 정적 제품들 뒤에 중고장비 추가
+				grid.insertAdjacentHTML('beforeend', usedHtml);
+			} else {
+				// 중고장비만 표시
+				grid.innerHTML = usedHtml || `<p style="text-align:center; grid-column:1/-1;">등록된 중고 장비가 없습니다.</p>`;
+			}
+			const loading = document.getElementById('loadingIndicator');
+			if (loading) loading.style.display = 'none';
 		}
 			
 		if (categoryParam && data.length === 0) {
@@ -189,7 +363,7 @@
 		}
     }
     
-	window.addEventListener('DOMContentLoaded', loadProducts);
+	window.addEventListener('DOMContentLoaded', initPage);
 		
 	function openEdit(id) {
 		location.href = `product_edit.html?id=${id}`;

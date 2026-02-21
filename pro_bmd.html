@@ -33,11 +33,9 @@
   <meta name="author" content="JCMedical">  
   <link rel="canonical" href="https://www.jcmedical.com/">
   <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/notice.css">
+  <link rel="stylesheet" href="css/products.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-  <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-  <script src="js/app.js" defer></script>
+  <script src="js/app.js"></script>
   <meta name="naver-site-verification" content="02772589406b6b3355207d270257fc00db805a91" />
 </head>
 <body>
@@ -59,7 +57,7 @@
                 <li class="nav-item">
 					<a href="#">PRODUCT <span class="icon-plus">+</span><span class="icon-minus">-</span></a>
 					<ul class="mobile-sub">
-						<li><a href="products.html?cat=bmd">골밀도진단기 (BMD)</a></li>
+						<li><a href="pro_bmd.html">골밀도진단기 (BMD)</a></li>
 						<li><a href="products.html?cat=eswt">체외충격파 (ESWT)</a></li>
 						<li><a href="products.html?cat=ultrasound">초음파진단기 (Ultrasound / SONO)</a></li>
 						<li><a href="products.html?cat=freq">고주파기기 (TORR RF)</a></li>
@@ -95,7 +93,7 @@
             </div>
         
             <div class="mega-col">
-				<a href="products.html?cat=bmd">골밀도진단기 (BMD)</a>
+				<a href="pro_bmd.html">골밀도진단기 (BMD)</a>
 				<a href="products.html?cat=eswt">체외충격파 (ESWT)</a>
 				<a href="products.html?cat=ultrasound">초음파진단기<br>(Ultrasound / SONO)</a>
 				<a href="products.html?cat=freq">고주파기기 (TORR RF)</a>
@@ -115,20 +113,20 @@
 
 <section class="sub-visual">
     <div class="visual-text">
-        <h2>NOTICE</h2>
-        <p>JC Medical의 끊임없는 도전과 변화, 이곳에서 확인하세요.</p>
+        <h2>PRODUCT</h2>
+        <p>JC Medical이 제안하는 최첨단 의료 솔루션을 확인하세요.</p>
     </div>
 </section>
 
 <div class="content-wrapper">
     <section>
         <div class="list-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px;">            
-            <a href="notice_write.html" id="admin-write-btn" class="btn btn-point" data-admin-only>등록</a>
+            <a href="product_write.html" id="admin-write-btn" class="btn btn-point" data-admin-only>제품 등록</a>
         </div>
 
-<div class="notice-section">
+<div class="product-section">
     <!-- JS로 렌더링될 영역 -->
-    <div id="noticeList" class="notice-grid">        
+    <div id="productList" class="product-grid">        
         <!-- 동적 로드 시 이 부분에 자바스크립트로 생성된 태그들이 들어갑니다 -->
 		<div id="loadingIndicator" class="loader-container">
 			<div class="spinner"></div>
@@ -143,47 +141,126 @@
 }
 </style>
 <script>
-    async function loadNotice() {
-		let { data, error } = await supabaseClient
-			.from('notices')
-			.select('*')
+    async function loadProducts() { 
+		const params = new URLSearchParams(window.location.search);
+		const categoryParam = params.get('cat');
+		const categoryMap = {ultrasound: '초음파기기', used: '중고 장비', freq: '고주파기기'};
+			
+		let query = supabaseClient
+			.from('products')
+			.select('*', { count: 'exact' })
 			.order('created_at', { ascending: false });
+			
+		if (categoryParam) {
+			query = query.eq('category', categoryParam);
+		}
 
+		const { data, error } = await query;
+  			
 		if (error) {
 			console.error('데이터 로드 실패:', error.message);
 			return;
-		}
+		}	
 
-		const grid = document.getElementById('noticeList');
+        const grid = document.getElementById('productList');
 		if (!grid) return;
-		if (data.length === 0) {
-			grid.innerHTML = `<p style="text-align:center; padding:50px 0;">등록된 공지사항이 없습니다.</p>`;
+        if (grid) {
+			grid.innerHTML = data.map(p =>{
+				const categoryLabel = categoryMap[p.category] ?? p.category;
+				const linkUrl = p.url && p.url.trim() !== '' ? p.url : `product_view.html?id=${p.id}`;
+				const linkTarget = p.url && p.url.trim() !== '' ? '_blank' : '_self';
+				
+				return `
+					<div class="product-card" onclick="window.open('${linkUrl}', '${linkTarget}')">
+						<div class="thumb"><img src="${p.image_url}"></div>
+						<div class="info">
+							<div class="card-header">
+								<span class="category">${categoryLabel}</span>
+								<div class="actions" data-admin-only>
+									<button class="edit-btn" onclick="event.stopPropagation(); openEdit('${p.id}')">수정</button>
+									<button class="delete-btn" onclick="event.stopPropagation(); deleteProduct('${p.id}')">삭제</button>
+								</div>
+							</div>
+							<h4>${p.title}</h4>							
+							<div class="more-btn">상세보기</div>
+						</div>
+					</div>
+				`;}).join('');
+				
+			applyAdminOnly(valid);
+		}
+			
+		if (categoryParam && data.length === 0) {
+			grid.innerHTML = `<p style="text-align:center">해당 카테고리의 제품이 없습니다.</p>`;
 			return;
 		}
-
-		grid.innerHTML = data.map((p, index) => {
-			// 이미지 유무 확인 (Quill 에디터 특성상 첫 번째 이미지를 썸네일로 쓰거나 별도 필드 이용)
-			const hasImage = p.image_url ? `<div class="thumb"><img src="${p.image_url}"></div>` : '';
-			const date = new Date(p.created_at).toLocaleDateString();
-        
-			return `
-				<div class="notice-item" onclick="location.href='notice_view.html?id=${p.id}'">
-					<div class="no">${data.length - index}</div>
-					<div class="content-group">
-						<span class="cat">${p.category || '공지'}</span>
-						<strong class="title">${p.title}</strong>
-						<span class="date">${date}</span>
-					</div>
-					${hasImage}
-				</div>
-			`;
-		}).join('');
+    }
+    
+	window.addEventListener('DOMContentLoaded', loadProducts);
 		
-		applyAdminOnly(valid);
+	function openEdit(id) {
+		location.href = `product_edit.html?id=${id}`;
 	}
+		
+	// 제품 삭제 함수
+	async function deleteProduct(id) {
+		if (!confirm('정말 삭제하시겠습니까? 이미지와 데이터가 모두 삭제됩니다.')) {
+			return;
+		}
+	
+		try {
+			// 1. 먼저 해당 제품의 정보(이미지 URL 포함)를 가져옵니다.
+			const { data: product, error: fetchError } = await supabaseClient
+				.from('products')
+				.select('image_url')
+				.eq('id', id)
+				.single();
+	
+			if (fetchError) throw fetchError;
+	
+			// 2. 이미지 URL에서 파일 경로(Path)를 추출
+			if (product && product.image_url) {
+				const urlParts = product.image_url.split('/public/');
+				if (urlParts.length > 1) {
+					const fullPath = urlParts[1]; // "products_img/파일이름.jpg" 형태
+					const bucketName = fullPath.split('/')[0]; // "products_img" (버킷명)
+					const filePath = fullPath.split('/').slice(1).join('/'); // "파일이름.jpg"
 
-	window.addEventListener('DOMContentLoaded', loadNotice);
-    </script>	
+					// 스토리지에서 파일 삭제
+					const { error: storageError } = await supabaseClient
+						.storage
+						.from(bucketName)
+						.remove([filePath]);
+	
+					if (storageError) {
+						console.warn('이미지 삭제 실패(이미 존재하지 않을 수 있음):', storageError.message);
+					}
+				}
+			}
+	
+			// 3. 데이터베이스에서 제품 행 삭제
+			const { error: dbError } = await supabaseClient
+				.from('products')
+				.delete()
+				.eq('id', id);
+	
+			if (dbError) throw dbError;
+	
+			alert('제품과 이미지가 성공적으로 삭제되었습니다.');
+			loadProducts(); // 리스트 새로고침
+	
+		} catch (error) {
+			console.error('삭제 작업 중 오류 발생:', error.message);
+			alert('삭제에 실패했습니다: ' + error.message);
+		}
+	}
+		
+	function applyAdminOnly(valid) {
+		document.querySelectorAll('[data-admin-only]').forEach(el => {
+			el.style.display = valid ? 'block' : 'none';
+		});
+	}		
+</script>	
 </div>
 <footer class="site-footer">
   <div class="footer-inner">
