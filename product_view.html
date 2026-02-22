@@ -140,6 +140,8 @@
 	
 		<div class="view-footer">
 			<button type="button" class="btn-list" onclick="location.href='products.html'">목록으로</button>
+			<button id="admin-edit-btn" class="btn-list" style="background:#C5A36A; display:none;" data-admin-only>수정하기</button>
+			<button id="deleteBtn" class="btn-list" style="background:#e74c3c; display:none;" data-admin-only>삭제</button>
 		</div>
 	</div>
 </div>
@@ -182,7 +184,11 @@ async function fetchProductDetail() {
         
         // 상세 내용 (Quill HTML 적용)
         document.getElementById('productContent').innerHTML = data.content;
-
+		
+		// 수정 버튼 처리
+        const editBtn = document.getElementById('admin-edit-btn');
+        editBtn.onclick = () => location.href = `product_edit.html?id=${data.id}`;
+			
     } catch (err) {
         console.error(err);
         document.getElementById('productContent').innerText = "정보를 불러오는 중 오류가 발생했습니다.";
@@ -287,6 +293,60 @@ window.addEventListener('DOMContentLoaded', () => {
     closeBtn.onclick = closeModal;
     modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 });
+
+	// 제품 삭제 함수
+	document.getElementById('deleteBtn').addEventListener('click', async () => {
+		if (!confirm('정말 삭제하시겠습니까? 이미지와 데이터가 모두 삭제됩니다.')) {
+			return;
+		}
+	
+		try {
+			// 1. 먼저 해당 제품의 정보(이미지 URL 포함)를 가져옵니다.
+			const { data: product, error: fetchError } = await supabaseClient
+				.from('products')
+				.select('image_url')
+				.eq('id', productId)
+				.single();
+	
+			if (fetchError) throw fetchError;
+	
+			// 2. 이미지 URL에서 파일 경로(Path)를 추출
+			if (product && product.image_url) {
+				const urlParts = product.image_url.split('/public/');
+				if (urlParts.length > 1) {
+					const fullPath = urlParts[1]; // "products_img/파일이름.jpg" 형태
+					const bucketName = fullPath.split('/')[0]; // "products_img" (버킷명)
+					const filePath = fullPath.split('/').slice(1).join('/'); // "파일이름.jpg"
+
+					// 스토리지에서 파일 삭제
+					const { error: storageError } = await supabaseClient
+						.storage
+						.from(bucketName)
+						.remove([filePath]);
+	
+					if (storageError) {
+						console.warn('이미지 삭제 실패(이미 존재하지 않을 수 있음):', storageError.message);
+					}
+				}
+			}
+	
+			// 3. 데이터베이스에서 제품 행 삭제
+			const { error: dbError } = await supabaseClient
+				.from('products')
+				.delete()
+				.eq('id', productId);
+	
+			if (dbError) throw dbError;
+	
+
+			alert('삭제되었습니다.');
+			location.href = 'products.html';
+	
+		} catch (error) {
+			console.error('삭제 작업 중 오류 발생:', error.message);
+			alert('삭제에 실패했습니다: ' + error.message);
+		}
+	});
     </script>	    
 </div>
 <footer class="site-footer">
