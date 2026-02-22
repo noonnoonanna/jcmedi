@@ -232,10 +232,10 @@ header:hover .mega-menu {
 }
 
 .point {
-    color: #00e5ff; 
+    color: #00425f; /*#00e5ff; */
     font-weight: 700;
     font-size: 3.4rem;
-    text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
+    text-shadow: 0 0 10px #b3e8ff; /*rgba(0, 229, 255, 0.5);*/
 }
 
 .fx-underline {
@@ -247,8 +247,9 @@ header:hover .mega-menu {
 
 .fx-underline::after {
     height: 3px; 
-    bottom: -2px;
-    background: linear-gradient(90deg, #00e5ff, rgba(44, 67, 73, 0));
+    bottom: -1px;
+    /*background: linear-gradient(90deg, #00e5ff, rgba(44, 67, 73, 0));*/
+	background: linear-gradient(90deg, #b3e8ff, rgba(44, 67, 73, 0));
 
 }
 
@@ -265,9 +266,6 @@ header:hover .mega-menu {
 }
 
 @media (max-width: 768px) {
-    .hero-text {
-        padding: 0 20px;
-    }
     .hero-title {
         font-size: 3rem;
         margin-bottom: 1rem;
@@ -391,10 +389,10 @@ header:hover .mega-menu {
 }
 
 .partnership-content .slogan {
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     line-height: 1.6;
     color: #555;
-    margin-bottom: 25px;
+    margin-bottom: 42px;
 }
 
 .partnership-content .slogan strong {
@@ -408,8 +406,8 @@ header:hover .mega-menu {
 }
 
 .contact-features li {
-    margin-bottom: 12px;
-    font-size: 0.95rem;
+    margin-bottom: 24px;
+    font-size: 1.10rem;
     color: #666;
     display: flex;
     align-items: center;
@@ -1234,7 +1232,7 @@ header:hover .mega-menu {
   }
 
   .hero-title {
-    font-size: 2rem; /* 메인 타이틀 크기 축소 */
+    font-size: 2.25rem; /* 메인 타이틀 크기 축소 */
     display: block;
     margin-bottom: 10px;
   }
@@ -1242,12 +1240,12 @@ header:hover .mega-menu {
   .hero h1 {font-size:1rem; line-height:1.2;}
 
   .fx-underline {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
     display: inline-block;
     margin-bottom: 5px;
   }
   
-  .fx-underline::after {height:6px;}
+  .fx-underline::after {height:3px;}
 
   .hero-text br {
     display: none;
@@ -1332,6 +1330,8 @@ header:hover .mega-menu {
   .mobile-sub li a {
     display: block; padding: 8px 0; font-size: 16px; color: #555; font-weight: 400;
   }
+  .partnership-content .slogan {font-size:1.15rem; margin-bottom:29px;}
+  .contact-features li{margin-bottom:17px;}
 }
 
 .loader-container {
