@@ -211,19 +211,20 @@
 
 <script>
 const products = [
-  { img: 'img/DT/DT 2.jpg', name: 'OsteoSys DEXXUM T', alt: '오스테오시스 DEXXUM T 골밀도진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/DTQ/DTQ_2.jpg', name: 'OsteoSys DEXXUM T Quantum', alt: '오스테오시스 DEXXUM T Quantum 골밀도진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/EXCELLUS/EXCELLUS 1.png', name: 'OsteoSys EXCELLUS', alt: '오스테오시스 EXCELLUS 골밀도진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/PRIMUS/PRIMUS 1.jpg', name: 'OsteoSys PRIMUS', alt: '오스테오시스 PRIMUS 골밀도진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/eswt-bc4377-b.png', name: 'OsteoSys SoniCure F/R', alt: '오스테오시스 SoniCure F/R 체외충격파 - 제이씨메디칼 의료기기' },
-  { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기', alt: '마인드레이 Resona I9 초음파진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/pro2_con.jpg', name: 'Consona 시리즈', alt: '마인드레이 Consona 시리즈 - 제이씨메디칼 의료기기' },
-  { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M', alt: 'TE Air e5M - 제이씨메디칼 의료기기' },
-  { img: 'img/pro4_torr.jpg', name: 'TORR RF', alt: 'TORR RF - 제이씨메디칼 의료기기' },
-  { img: 'img/n6.jpg', name: 'Consona N6', alt: '마인드레이 Consona N6 초음파진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/n7.jpg', name: 'Consona N7', alt: '마인드레이 Consona N7 초음파진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/n8.jpg', name: 'Consona N8', alt: '마인드레이 Consona N8 초음파진단기 - 제이씨메디칼 의료기기' },
-  { img: 'img/n9.jpg', name: 'Consona N9', alt: '마인드레이 Consona N9 초음파진단기 - 제이씨메디칼 의료기기' },
+  { img: 'img/DT/DT 2.jpg', name: 'OsteoSys DEXXUM T', alt: '오스테오시스 DEXXUM T 골밀도진단기 - 제이씨메디칼 의료기기', cate: 'bmd' },
+  { img: 'img/DTQ/DTQ_2.jpg', name: 'OsteoSys DEXXUM T Quantum', alt: '오스테오시스 DEXXUM T Quantum 골밀도진단기 - 제이씨메디칼 의료기기', cate: 'bmd' },
+  { img: 'img/EXCELLUS/quantum-pro.png', name: 'OsteoSys Quantum Pro', alt: '오스테오시스 Quantum Pro 골밀도진단기 - 제이씨메디칼 의료기기', cate: 'bmd' },
+  { img: 'img/EXCELLUS/EXCELLUS 1.png', name: 'OsteoSys EXCELLUS', alt: '오스테오시스 EXCELLUS 골밀도진단기 - 제이씨메디칼 의료기기', cate: 'bmd' },
+  { img: 'img/PRIMUS/PRIMUS 1.jpg', name: 'OsteoSys PRIMUS', alt: '오스테오시스 PRIMUS 골밀도진단기 - 제이씨메디칼 의료기기', cate: 'bmd' },
+  { img: 'img/eswt-bc4377-b.png', name: 'OsteoSys SoniCure F/R', alt: '오스테오시스 SoniCure F/R 체외충격파 - 제이씨메디칼 의료기기', cate: 'eswt' },
+  { img: 'img/pro1_i9.jpg', name: 'Resona I9 초음파진단기', alt: '마인드레이 Resona I9 초음파진단기 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/pro2_con.jpg', name: 'Consona 시리즈', alt: '마인드레이 Consona 시리즈 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/pro3_e5m.jpg', name: 'TE Air e5M', alt: 'TE Air e5M - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/pro4_torr.jpg', name: 'TORR RF', alt: 'TORR RF - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/n6.jpg', name: 'Consona N6', alt: '마인드레이 Consona N6 초음파진단기 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/n7.jpg', name: 'Consona N7', alt: '마인드레이 Consona N7 초음파진단기 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/n8.jpg', name: 'Consona N8', alt: '마인드레이 Consona N8 초음파진단기 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
+  { img: 'img/n9.jpg', name: 'Consona N9', alt: '마인드레이 Consona N9 초음파진단기 - 제이씨메디칼 의료기기', cate: 'ultrasound' },
 ];
 
 const slider = document.getElementById('productList');
@@ -235,12 +236,14 @@ function createItems(target) {
     const div = document.createElement('div');
     div.className = 'item';
     div.innerHTML = `
-      <div class="img-box">
-        <img src="${p.img}" alt="${p.alt}" loading="lazy">
-      </div>
-      <div class="info">
-        <div class="name">${p.name}</div>
-      </div>
+	  <a href="products.html?cat=${p.cate}">
+        <div class="img-box">
+          <img src="${p.img}" alt="${p.alt}" loading="lazy">
+        </div>
+        <div class="info">
+          <div class="name">${p.name}</div>
+        </div>
+	  </a>
     `;
     target.appendChild(div);
   });
@@ -513,5 +516,4 @@ window.onload = function() {
 </style>
 <script src="js/app.js" defer></script>
 </body>
-
 </html>
