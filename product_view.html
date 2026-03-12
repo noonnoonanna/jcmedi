@@ -200,10 +200,10 @@ async function fetchProductDetail() {
         document.getElementById('title').innerText = data.title;
         document.getElementById('category').innerText = categoryMap[data.category] || data.category;
         document.getElementById('productImg').src = data.image_url || 'img/no-image.png';
-		document.getElementById('pro_name').innerText = data.pro_name;
-		document.getElementById('brand').innerText = data.brand;
-		document.getElementById('model_year').innerText = data.model_year;
-		document.getElementById('probe').innerText = data.probe;
+		document.getElementById('pro_name').innerText = data.pro_name || '-';
+		document.getElementById('brand').innerText = data.brand || '-';
+		document.getElementById('model_year').innerText = data.model_year || '-';
+		document.getElementById('probe').innerText = data.probe || '-';
         
         // 상세 내용 (Quill HTML 적용)
         document.getElementById('productContent').innerHTML = data.content;
