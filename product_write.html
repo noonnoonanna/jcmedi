@@ -159,6 +159,22 @@ window.addEventListener('DOMContentLoaded', () => {
 					<label for="title">제품명</label>
 					<input type="text" id="title" placeholder="제품 모델명을 입력하세요" required>
 				</div>
+				<div class="input-group">
+					<label for="pro_name">모델명</label>
+					<input type="text" id="pro_name">
+				</div>
+				<div class="input-group">
+					<label for="brand">제조사</label>
+					<input type="text" id="brand">
+				</div>
+				<div class="input-group">
+					<label for="model_year">연식</label>
+					<input type="text" id="model_year">
+				</div>
+				<div class="input-group">
+					<label for="probe">프로브 구성</label>
+					<input type="text" id="probe">
+				</div>
 				<div class="input-group full-width">
 					<label for="url">상세 연결 URL (외부 링크)</label>
 					<input id="url" placeholder="https://example.com">
@@ -310,6 +326,10 @@ document.getElementById('productForm').onsubmit = async (e) => {
                 category: document.getElementById('category').value,
                 title: document.getElementById('title').value,
                 url: document.getElementById('url').value,
+				pro_name: document.getElementById('pro_name').value,
+				brand: document.getElementById('brand').value,
+				model_year: document.getElementById('model_year').value,
+				probe: document.getElementById('probe').value,
                 image_url: imageUrl,
                 content: quill.root.innerHTML
             }]);

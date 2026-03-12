@@ -480,4 +480,15 @@
     .meta-value {
         font-size: 14px;
     }
+	.form-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+.input-group input[type="text"]:focus {
+    border-color: var(--point-color);
+    outline: none;
+    background-color: #f8f9fa;
 }
