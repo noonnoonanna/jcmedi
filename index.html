@@ -515,5 +515,279 @@ window.onload = function() {
 }
 </style>
 <script src="js/app.js" defer></script>
+<style>
+
+.popup-wrap{
+    position:fixed;
+    top:100px;
+    left:50%;
+    transform:translateX(-50%);
+    display:flex;
+    gap:20px;
+    z-index:9999;
+}
+
+.popup-item{
+    background:#fff;
+    position:relative;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+.popup-item img{
+    width:400px;
+    display:block;
+}
+
+/* X 버튼 */
+
+.popup-close{
+    position:absolute;
+    right:8px;
+    top:8px;
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:none;
+    background:#000;
+    color:#fff;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.popup-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px;
+    font-size:13px;
+    background:#f5f5f5;
+}
+
+.today-close{
+    cursor:pointer;
+    color:#333;
+}
+
+.today-close:hover{
+    text-decoration:underline;
+}
+
+.popup-btn{
+    background:#111;
+    color:#fff;
+    border:none;
+    padding:6px 12px;
+    border-radius:4px;
+    cursor:pointer;
+}
+
+.popup-btn:hover{
+    background:#333;
+}
+
+@media(max-width:768px){
+
+.popup-wrap{
+    left:0;
+    transform:none;
+    width:100%;
+    overflow-x:auto;
+	gap:0;
+}
+
+.popup-item{
+    min-width:100%;
+}
+
+.popup-item img{
+    width:100%;
+}
+
+}
+
+</style>
+
+
+
+<div class="popup-wrap">
+
+    <!-- popup1 -->
+    <div class="popup-item" id="popup1">
+
+        <button class="popup-close"
+        onclick="closePopup('popup1')">✕</button>
+
+        <img src="pop/pop_01.jpg">
+
+        <div class="popup-bottom">
+
+            <span class="today-close"
+            onclick="closeToday('popup1')">
+            오늘 하루 안보기
+            </span>
+
+            <button class="popup-btn"
+            onclick="closePopup('popup1')">
+            닫기
+            </button>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- popup2 -->
+    <div class="popup-item" id="popup2">
+
+        <button class="popup-close"
+        onclick="closePopup('popup2')">✕</button>
+
+        <img src="pop/pop_02.jpg">
+
+        <div class="popup-bottom">
+
+            <span class="today-close"
+            onclick="closeToday('popup2')">
+            오늘 하루 안보기
+            </span>
+
+            <button class="popup-btn"
+            onclick="closePopup('popup2')">
+            닫기
+            </button>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+<script>
+
+
+function setCookie(name, value){
+
+    var d = new Date();
+
+    d.setHours(23,59,59,999);
+
+    document.cookie =
+        name + "=" + value +
+        "; expires=" + d.toUTCString() +
+        "; path=/";
+
+}
+
+
+function getCookie(name){
+
+    var v =
+    document.cookie.match(
+        '(^|;) ?' + name + '=([^;]*)(;|$)'
+    );
+
+    return v ? v[2] : null;
+
+}
+
+
+
+function closePopup(id){
+
+    var el = document.getElementById(id);
+
+    if(el) el.style.display="none";
+
+}
+
+
+
+function closeToday(id){
+
+    var today =
+        new Date().toISOString().slice(0,10);
+
+    setCookie("popup_"+id, today);
+
+    var el = document.getElementById(id);
+
+    if(el) el.style.display="none";
+
+}
+
+
+
+window.onload=function(){
+
+    var today =
+        new Date().toISOString().slice(0,10);
+
+
+    var popups =
+        document.querySelectorAll(".popup-item");
+
+
+    popups.forEach(function(p){
+
+        var id = p.id;
+
+        var saved =
+        getCookie("popup_"+id);
+
+        if(saved === today){
+
+            p.style.display="none";
+
+        }
+
+    });
+
+}
+
+let slideIndex = 0;
+
+function startMobileSlide(){
+
+    if(window.innerWidth > 768) return;
+
+    const wrap =
+        document.querySelector(".popup-wrap");
+
+    const items =
+        document.querySelectorAll(".popup-item");
+
+    if(items.length <= 1) return;
+
+    setInterval(function(){
+
+        slideIndex++;
+
+        if(slideIndex >= items.length){
+            slideIndex = 0;
+        }
+
+        wrap.scrollTo({
+            left: window.innerWidth * slideIndex,
+            behavior: "smooth"
+        });
+
+    },2000);
+
+}
+
+
+window.addEventListener("load", function(){
+
+    startMobileSlide();
+
+});
+
+
+</script>
+
 </body>
 </html>
