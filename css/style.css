@@ -66,7 +66,7 @@ header {
 }
 
 .vendor-logos img:last-child {
-    height: 22px;
+    height: 35px;
     width: auto;
 }
 
@@ -118,7 +118,7 @@ header:hover .mega-menu {
 
 .mega-inner {
   align-items: start;
-  padding: 30px 16px 40px;
+  padding: 30px 16px 20px;
 }
 
 .mega-col {
