@@ -206,9 +206,8 @@
   </div>
 
   <div class="showcase">
-    <div class="slider-wrapper">
-      <div class="slider" id="productList"></div>
-      <div class="slider" id="productListClone"></div>
+    <div class="swiper productSwiper">
+      <div class="slider swiper-wrapper" id="productList"></div>
     </div>
   </div>
 </section>
@@ -232,30 +231,56 @@ const products = [
 ];
 
 const slider = document.getElementById('productList');
-const clone = document.getElementById('productListClone');
 
-// 제품 아이템을 생성하는 함수
 function createItems(target) {
-  products.forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'item';
-    div.innerHTML = `
-	  <a href="products.html?cat=${p.cate}">
-        <div class="img-box">
-          <img src="${p.img}" alt="${p.alt}" loading="lazy">
-        </div>
-        <div class="info">
-          <div class="name">${p.name}</div>
-        </div>
-	  </a>
-    `;
-    target.appendChild(div);
-  });
+  // 3번 반복해서 넣기
+  for (let i = 0; i < 3; i++) {
+    products.forEach(p => {
+      const div = document.createElement('div');
+      div.className = 'item swiper-slide';
+
+      div.innerHTML = `
+        <a href="products.html?cat=${p.cate}">
+          <div class="img-box">
+            <img src="${p.img}" alt="${p.alt}" loading="lazy">
+          </div>
+          <div class="info">
+            <div class="name">${p.name}</div>
+          </div>
+        </a>
+      `;
+
+      target.appendChild(div);
+    });
+  }
 }
 
-// 원본과 복제본에 각각 아이템 추가
-createItems(slider);
-createItems(clone);
+window.addEventListener('load', () => {
+  createItems(slider);
+
+  const isMobile = window.innerWidth <= 768;
+
+  new Swiper('.productSwiper', {
+    slidesPerView: 'auto',
+    spaceBetween: isMobile ? 16 : 30,
+
+    loop: true,
+    loopAdditionalSlides: 10,
+    loopedSlides: 20,
+
+    autoplay: {
+      delay: 0,
+      disableOnInteraction: false,
+    },
+
+    speed: isMobile ? 6000 : 10000, // 👈 핵심
+
+    freeMode: true,
+    freeModeMomentum: false,
+
+    grabCursor: true,
+  });
+});
 </script>
 
 <style>
@@ -284,34 +309,14 @@ createItems(clone);
   overflow: hidden;
 }
 
-/* 슬라이더 두 개를 감싸는 컨테이너 */
-.slider-wrapper {
-  display: flex;
-  width: max-content;
-  animation: scroll var(--ani-speed) linear infinite;
-}
-
-/* 마우스 호버 시 멈춤 */
-.slider-wrapper:hover {
-  animation-play-state: paused;
-}
 
 .slider {
   display: flex;
-  flex-shrink: 0;
 }
 
 .slider .item {
   width: 300px;
   margin-right: 30px;
-  background: var(--card-bg);
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-  will-change: transform; /* 브라우저에게 변화를 미리 예고하여 최적화 */
-  -webkit-font-smoothing: antialiased; /* 텍스트와 이미지 주변부 정리 */
 }
 
 .slider .item:hover {
@@ -342,15 +347,19 @@ createItems(clone);
 .info { padding: 24px; text-align: center; }
 .info .name { font-size: 1.1rem; font-weight: 500; color: var(--text-color); }
 
-/* 핵심 애니메이션: 전체 길이의 50%만큼만 이동하고 처음으로 리셋 */
-@keyframes scroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+.productSwiper {
+  overflow: hidden;
+}
+
+.swiper-wrapper {
+  transition-timing-function: linear !important;
 }
 
 @media (max-width: 768px) {
-  .slider .item { width: 220px; margin-right: 20px; }
-  :root { --ani-speed: 50s; } /* 모바일은 거리가 짧으므로 조금 더 빠르게 */
+  .slider .item {
+    width: 220px;
+    margin-right: 16px;
+  }
 }
 </style>
 
