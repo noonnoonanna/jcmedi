@@ -1,0 +1,28 @@
+name: Supabase Keep Alive
+
+on:
+  schedule:
+    - cron: "17 0,8,16 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Read notices table
+        env:
+          SUPABASE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          curl --fail --silent --show-error \
+            --connect-timeout 15 \
+            --max-time 30 \
+            --retry 2 \
+            --output /dev/null \
+            "https://lflnsswvlxjpikphdcxz.supabase.co/rest/v1/notices?select=*&limit=1" \
+            --header "apikey: ${SUPABASE_KEY}"
+
+          echo "Supabase 조회 성공"
